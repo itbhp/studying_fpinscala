@@ -26,9 +26,16 @@ class CompositionTest extends FunSuite with Matchers{
 
     val doubleToStr: Double => String = (a: Double) => a.toString
     val inverse: Int => Double = (a:Int) => 1.0 / a
-//    val inverseAsString = (a:Int) => (1.0 / a).toString
 
     my_compose(doubleToStr, inverse) (4) shouldEqual((doubleToStr compose inverse)(4))
+  }
+
+  test("my compose vs scala andThen"){
+
+    val doubleToStr: Double => String = (a: Double) => a.toString
+    val inverse: Int => Double = (a:Int) => 1.0 / a
+
+    my_compose(doubleToStr, inverse) (4) shouldEqual((inverse andThen  doubleToStr)(4))
   }
 
   def my_compose[A,B,C](f: B => C, g: A => B): A => C = a => f(g(a))
