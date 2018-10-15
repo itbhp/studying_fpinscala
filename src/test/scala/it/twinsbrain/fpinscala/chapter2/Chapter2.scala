@@ -23,6 +23,7 @@ class Chapter2Test extends FunSuite with Matchers {
       else loop(curr, curr + last, count + 1)
     }
 
-    loop(1, 0, 0)
+    if (n <= 1) n
+    else loop(0, 1, 1)
   }
 }
