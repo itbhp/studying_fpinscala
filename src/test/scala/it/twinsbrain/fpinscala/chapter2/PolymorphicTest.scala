@@ -2,7 +2,7 @@ package it.twinsbrain.fpinscala.chapter2
 
 import org.scalatest._
 
-class PolymorphicTest extends FunSuite with Matchers {
+object PolymorphicTest extends FunSuite with Matchers {
 
   test("isSorted") {
     val fromLesserToGreater: (Int, Int) => Boolean = (prev: Int, curr: Int) => prev < curr

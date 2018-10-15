@@ -5,7 +5,7 @@ import org.scalatest._
 
 import scala.annotation.tailrec
 
-class FibonacciTest extends FunSuite with Matchers {
+object FibonacciTest extends FunSuite with Matchers {
   test("fibonacci") {
     withClue("fib(0) =") { fib(0) should be(0) }
     withClue("fib(1) =") { fib(3) should be(2) }
