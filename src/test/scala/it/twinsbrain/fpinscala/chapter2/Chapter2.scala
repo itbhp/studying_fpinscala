@@ -26,7 +26,7 @@ class Chapter2Test extends FunSuite with Matchers {
     else loop( 1)
   }
 
-  ignore("fibonacci") {
+  test("fibonacci") {
     withClue("fib(0) =") { fib(0) should be(0) }
     withClue("fib(1) =") { fib(3) should be(2) }
     withClue("fib(2) =") { fib(1) should be(1) }
