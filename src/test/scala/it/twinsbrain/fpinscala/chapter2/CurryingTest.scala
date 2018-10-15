@@ -10,10 +10,10 @@ class CurryingTest extends FunSuite with Matchers{
     curry(product)(2)(3) shouldEqual product(2,3)
   }
 
-  def curry[A,B,C](f: (A, B) => C): A => (B => C) = a => b => f(a, b)
+  def curry[A,B,C](f: (A, B) => C): A => B => C = a => b => f(a, b)
 
   test("uncurry"){
-    val productCurried: (Int) => (Int) => Int = a => b => a * b
+    val productCurried: Int => Int => Int = a => b => a * b
 
     productCurried(2)(3) shouldEqual uncurry(productCurried)(2,3)
   }
