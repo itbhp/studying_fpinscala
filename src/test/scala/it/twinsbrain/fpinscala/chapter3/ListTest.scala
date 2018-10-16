@@ -51,4 +51,10 @@ class ListTest extends FunSuite with Matchers{
     drop(4,aList) shouldEqual Nil
   }
 
+  test("dropWhile on nonEmpty"){
+    val aList: List[Int] = List(2,4,6,3,4,5)
+    val isEven: Int => Boolean = (x: Int) => x % 2 == 0
+    dropWhile(isEven, aList) shouldEqual List(3,4,5)
+  }
+
 }
