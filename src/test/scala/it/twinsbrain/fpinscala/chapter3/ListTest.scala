@@ -36,4 +36,19 @@ class ListTest extends FunSuite with Matchers{
     setHead(4,aList) shouldEqual Nil
   }
 
+  test("drop on nonEmpty"){
+    val aList = List(1,2,3)
+    drop(2, aList) shouldEqual List(3)
+  }
+
+  test("drop on singleton"){
+    val aList = List(1)
+    drop(3, aList) shouldEqual Nil
+  }
+
+  test("drop on empty"){
+    val aList = List()
+    drop(4,aList) shouldEqual Nil
+  }
+
 }

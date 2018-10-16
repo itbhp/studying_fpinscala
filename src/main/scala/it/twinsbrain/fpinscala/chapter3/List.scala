@@ -22,7 +22,7 @@ object List {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
 
-  def tail(aList: List[Int]): List[Int] = aList match {
+  def tail[A](aList: List[A]): List[A] = aList match {
     case Nil => Nil
     case Cons(_, t) => t
   }
@@ -30,5 +30,10 @@ object List {
   def setHead(a:Int, aList: List[Int]): List[Int] = aList match {
     case Nil => Nil
     case Cons(_, t) => Cons(a,t)
+  }
+
+  def drop[A](n: Int,l: List[A]): List[A] = n match {
+    case 0 => l
+    case _ => drop(n-1, tail(l))
   }
 }
