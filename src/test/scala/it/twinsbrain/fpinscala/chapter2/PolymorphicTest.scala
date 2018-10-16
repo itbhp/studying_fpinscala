@@ -5,7 +5,7 @@ import org.scalatest._
 object PolymorphicTest extends FunSuite with Matchers {
 
   test("isSorted") {
-    val fromLesserToGreater: (Int, Int) => Boolean = (prev: Int, curr: Int) => prev < curr
+    val fromLesserToGreater = (prev: Int, curr: Int) => prev < curr
     withClue("Array(2,3,1)") {
       isSorted(Array(2,3,1), fromLesserToGreater) should be(false)
     }
