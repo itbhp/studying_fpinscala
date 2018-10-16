@@ -2,7 +2,7 @@ package it.twinsbrain.fpinscala.chapter2
 
 import org.scalatest._
 
-object CurryingTest extends FunSuite with Matchers{
+class CurryingTest extends FunSuite with Matchers{
 
   test("curry"){
     val product: (Int,Int) => Int = (a,b) => a * b

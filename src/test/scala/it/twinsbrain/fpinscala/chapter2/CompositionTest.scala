@@ -2,7 +2,7 @@ package it.twinsbrain.fpinscala.chapter2
 
 import org.scalatest.{FunSuite, Matchers}
 
-object CompositionTest extends FunSuite with Matchers{
+class CompositionTest extends FunSuite with Matchers{
 
   test("compose functions same domains"){
 
