@@ -68,4 +68,12 @@ class ListTest extends FunSuite with Matchers{
   test("init on nonEmpty list"){
     init(List(1,2,3,4)) shouldEqual List(1,2,3)
   }
+
+  test("exercises"){
+    foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) shouldEqual(List(1,2,3))
+  }
+
+  test("length on nonEmpty list"){
+    List.length(List(1,2,3,4,5)) should be(5)
+  }
 }
