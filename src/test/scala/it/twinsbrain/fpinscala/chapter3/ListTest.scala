@@ -88,4 +88,8 @@ class ListTest extends FunSuite with Matchers{
   test("reverse nonEmpty"){
     reverse(List(1,2,3)) shouldEqual List(3,2,1)
   }
+
+  test("append"){
+    append(List(1,2),4) shouldEqual(List(1,2,4))
+  }
 }
