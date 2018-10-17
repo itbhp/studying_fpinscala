@@ -92,4 +92,8 @@ class ListTest extends FunSuite with Matchers{
   test("append"){
     append(List(1,2),4) shouldEqual(List(1,2,4))
   }
+
+  test("flatten"){
+    flatten(List(List(2,1), List(3,4))) shouldEqual(List(2,1,3,4))
+  }
 }

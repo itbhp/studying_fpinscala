@@ -68,4 +68,8 @@ object List {
 
   def append[A](as:List[A], a: A): List[A] =
     foldLeft(reverse(as), List(a)) ((acc, e) => Cons(e, acc))
+
+  def flatten[A](as: List[List[A]]): List[A] = {
+    foldLeft(as, List[A]()) ((acc, list) => foldLeft(list,acc)(append))
+  }
 }
