@@ -54,14 +54,7 @@ object List {
   }
 
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B =
-//  {
-//    val g = (b:B, a:A) => f(a,b)
-//    foldLeft(as,z)(g)
-//  }
-    as match {
-      case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
-    }
+    foldLeft(reverse(as),z)((b,a) => f(a,b))
 
   def reverse[A](as: List[A]): List[A] =
     foldLeft(as, List[A]()) ((acc, e) => Cons(e, acc))
