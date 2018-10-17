@@ -76,4 +76,16 @@ class ListTest extends FunSuite with Matchers{
   test("length on nonEmpty list"){
     List.length(List(1,2,3,4,5)) should be(5)
   }
+
+  test("reverse empty"){
+    reverse(List()) shouldEqual Nil
+  }
+
+  test("reverse singleton"){
+    reverse(List(1)) shouldEqual List(1)
+  }
+
+  test("reverse nonEmpty"){
+    reverse(List(1,2,3)) shouldEqual List(3,2,1)
+  }
 }
