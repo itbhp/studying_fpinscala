@@ -57,4 +57,15 @@ class ListTest extends FunSuite with Matchers{
     dropWhile(isEven, aList) shouldEqual List(3,4,5)
   }
 
+  test("init on empty"){
+    init(List()) shouldEqual Nil
+  }
+
+  test("init on singletonList"){
+    init(List(1)) shouldEqual Nil
+  }
+
+  test("init on nonEmpty list"){
+    init(List(1,2,3,4)) shouldEqual List(1,2,3)
+  }
 }
