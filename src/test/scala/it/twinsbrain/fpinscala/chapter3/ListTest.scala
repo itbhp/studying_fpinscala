@@ -96,4 +96,12 @@ class ListTest extends FunSuite with Matchers{
   test("flatten"){
     flatten(List(List(2,1), List(3,4))) shouldEqual(List(2,1,3,4))
   }
+
+  test("addOne"){
+    addOne(List(3,4)) shouldEqual(List(4,5))
+  }
+
+  test("doubles to strings"){
+    doublesToStr(List(3.0,4.0)) shouldEqual(List("3.0","4.0"))
+  }
 }
