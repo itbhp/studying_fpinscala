@@ -108,4 +108,16 @@ class ListTest extends FunSuite with Matchers{
   test("filter"){
     filter(List(1,2,3,4,5,6))(_%2 == 0) shouldEqual List(2,4,6)
   }
+
+  test("add two int lists same length"){
+    addList(List(1,2,3),List(4,5,6)) shouldEqual List(5,7,9)
+  }
+
+  test("add two int lists one Nil"){
+    addList(Cons(1,Cons(2,Nil)),Nil) shouldEqual Nil
+  }
+
+  test("add two int lists different legnths"){
+    addList(List(1,2),List(3,4,5)) shouldEqual List(4,6)
+  }
 }

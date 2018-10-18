@@ -13,7 +13,7 @@ object List {
 
   def sum(ints: List[Int]): Int = foldRight(ints, 0)(_ + _)
 
-  def product(ds: List[Double]): Double = foldRight(ds,1.0)(_ * _)
+  def product(ds: List[Double]): Double = foldRight(ds, 1.0)(_ * _)
 
   def tail[A](aList: List[A]): List[A] = aList match {
     case Nil => Nil
@@ -54,27 +54,37 @@ object List {
   }
 
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B =
-    foldLeft(reverse(as),z)((b,a) => f(a,b))
+    foldLeft(reverse(as), z)((b, a) => f(a, b))
 
   def reverse[A](as: List[A]): List[A] =
-    foldLeft(as, List[A]()) ((acc, e) => Cons(e, acc))
+    foldLeft(as, List[A]())((acc, e) => Cons(e, acc))
 
-  def append[A](as:List[A], a: A): List[A] =
-    foldLeft(reverse(as), List(a)) ((acc, e) => Cons(e, acc))
+  def append[A](as: List[A], a: A): List[A] =
+    foldLeft(reverse(as), List(a))((acc, e) => Cons(e, acc))
 
   def filter[A](as: List[A])(p: A => Boolean): List[A] =
-    flatMap(as)(a => if(p(a)) List(a) else Nil)
+    flatMap(as)(a => if (p(a)) List(a) else Nil)
 
   def flatten[A](as: List[List[A]]): List[A] = {
-    foldLeft(as, List[A]()) ((acc, list) => foldLeft(list,acc)(append))
+    foldLeft(as, List[A]())((acc, list) => foldLeft(list, acc)(append))
   }
 
   def addOne(as: List[Int]): List[Int] = map(as)(_ + 1)
 
   def doublesToStr(as: List[Double]): List[String] = map(as)(_.toString)
 
-  def map[A,B](as: List[A])(f: A => B):List[B] =
-    foldRight(as, Nil:List[B])((x:A,xs:List[B]) => Cons(f(x),xs))
+  def map[A, B](as: List[A])(f: A => B): List[B] =
+    foldRight(as, Nil: List[B])((x: A, xs: List[B]) => Cons(f(x), xs))
 
-  def flatMap[A,B](as: List[A])(f: A => List[B]): List[B] = flatten(map(as)(f))
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] = flatten(map(as)(f))
+
+  def addList(as: List[Int], bs: List[Int]): List[Int] = zipWith(as,bs)(_ + _)
+
+  def zipWith[A](as: List[A], bs: List[A])(f: (A,A) => A): List[A] =
+    (as, bs) match {
+      case (Nil, Nil) => Nil
+      case (Cons(_, _), Nil) => Nil
+      case (Nil, Cons(_, _)) => Nil
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), zipWith(t1, t2)(f))
+    }
 }
