@@ -62,6 +62,9 @@ object List {
   def append[A](as:List[A], a: A): List[A] =
     foldLeft(reverse(as), List(a)) ((acc, e) => Cons(e, acc))
 
+  def filter[A](as: List[A])(p: A => Boolean): List[A] =
+    foldRight(as, Nil:List[A])((x, xs) => if(p(x)) Cons(x,xs) else xs)
+
   def flatten[A](as: List[List[A]]): List[A] = {
     foldLeft(as, List[A]()) ((acc, list) => foldLeft(list,acc)(append))
   }

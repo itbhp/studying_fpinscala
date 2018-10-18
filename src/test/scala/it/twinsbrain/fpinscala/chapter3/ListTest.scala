@@ -70,7 +70,7 @@ class ListTest extends FunSuite with Matchers{
   }
 
   test("exercises"){
-    foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) shouldEqual(List(1,2,3))
+    foldRight(List(1,2,3), Nil:List[Int])(Cons(_,_)) shouldEqual List(1,2,3)
   }
 
   test("length on nonEmpty list"){
@@ -90,18 +90,22 @@ class ListTest extends FunSuite with Matchers{
   }
 
   test("append"){
-    append(List(1,2),4) shouldEqual(List(1,2,4))
+    append(List(1,2),4) shouldEqual List(1,2,4)
   }
 
   test("flatten"){
-    flatten(List(List(2,1), List(3,4))) shouldEqual(List(2,1,3,4))
+    flatten(List(List(2,1), List(3,4))) shouldEqual List(2,1,3,4)
   }
 
   test("addOne"){
-    addOne(List(3,4)) shouldEqual(List(4,5))
+    addOne(List(3,4)) shouldEqual List(4,5)
   }
 
   test("doubles to strings"){
-    doublesToStr(List(3.0,4.0)) shouldEqual(List("3.0","4.0"))
+    doublesToStr(List(3.0,4.0)) shouldEqual List("3.0","4.0")
+  }
+
+  test("filter"){
+    filter(List(1,2,3,4,5,6))(_%2 == 0) shouldEqual List(2,4,6)
   }
 }
