@@ -87,4 +87,17 @@ object List {
       case (Nil, Cons(_, _)) => Nil
       case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), zipWith(t1, t2)(f))
     }
+
+  def take[A](n: Int, as: List[A]): List[A] = {
+    if (n == 0) Nil
+    else as match {
+      case Cons(h, t) => Cons(h, take(n -1, t))
+      case Nil => Nil
+    }
+  }
+
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+
+    false
+  }
 }

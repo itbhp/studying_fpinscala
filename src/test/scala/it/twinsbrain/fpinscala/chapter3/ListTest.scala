@@ -120,4 +120,20 @@ class ListTest extends FunSuite with Matchers{
   test("add two int lists different legnths"){
     addList(List(1,2),List(3,4,5)) shouldEqual List(4,6)
   }
+
+  test("take on empty list"){
+    take(4, Nil) shouldEqual Nil
+  }
+
+  test("take on non empty list"){
+    take(4, List(1,2,3,4,5,6)) shouldEqual List(1,2,3,4)
+  }
+
+  test("try to take more on non empty list"){
+    take(4, List(1,2,3)) shouldEqual List(1,2,3)
+  }
+
+  ignore("hasSubsequence"){
+    hasSubsequence(List(1,2,3,4,5,6,7),List(3,4,5)) shouldEqual true
+  }
 }
