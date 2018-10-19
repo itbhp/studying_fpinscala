@@ -96,6 +96,15 @@ object List {
     }
   }
 
+  def startsWith[A](as: List[A], prefix: List[A]): Boolean = (as, prefix) match {
+    case (_, Nil) => true
+    case (Cons(h1, t1), Cons(h2, t2)) => {
+      if(h1 == h2)
+        startsWith(t1, t2)
+      else false
+    }
+  }
+
   def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
 
     false

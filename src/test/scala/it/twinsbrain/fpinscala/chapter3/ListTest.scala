@@ -133,6 +133,10 @@ class ListTest extends FunSuite with Matchers{
     take(4, List(1,2,3)) shouldEqual List(1,2,3)
   }
 
+  test("startsWith"){
+    startsWith(List(1,2,3,4,5,6,7),List(1,2)) shouldEqual true
+  }
+
   ignore("hasSubsequence"){
     hasSubsequence(List(1,2,3,4,5,6,7),List(3,4,5)) shouldEqual true
   }
