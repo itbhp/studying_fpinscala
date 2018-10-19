@@ -13,18 +13,14 @@ object Tree {
   }
 
   def size[A](t: Tree[A]): Int =
-    fold(t)(_=>1)((l,r) => 1 + size(l) + size(r))
+    fold(t)(_ => 1)((l, r) => 1 + size(l) + size(r))
 
   def maximum(tree: Tree[Int]): Int =
-    fold(tree)(v => v) ((l,r) => maximum(l) max maximum(r))
+    fold(tree)(v => v)((l, r) => maximum(l) max maximum(r))
 
   def depth[A](tree: Tree[A]): Int =
     fold(tree)(_ => 0)((r, l) => 1 + (depth(l) max depth(r)))
 
   def map[A, B](tree: Tree[A])(f: A => B): Tree[B] =
-  //    fold(tree)(v => Leaf(f(v)))((l, r) => Branch(map(l)(f), map(r)(f)))
-  tree match {
-    case Leaf(v) => Leaf(f(v))
-    case Branch(l, r) => Branch(map(l)(f), map(r)(f))
-  }
+    fold(tree)(v => Leaf(f(v)): Tree[B])((l, r) => Branch(map(l)(f), map(r)(f)))
 }
