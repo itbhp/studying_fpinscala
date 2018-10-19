@@ -26,4 +26,11 @@ class TreeTest extends FunSuite with Matchers {
       Tree.depth(Branch(Leaf(1), Branch(Leaf(2), Leaf(3)))) shouldEqual 2
     }
   }
+
+  test("map"){
+    val example = Branch(Branch(Leaf(3), Leaf(4)), Branch(Leaf(5), Branch(Leaf(1), Leaf(2))))
+    val exepcted = Branch(Branch(Leaf(6), Leaf(8)), Branch(Leaf(10), Branch(Leaf(2), Leaf(4))))
+
+    Tree.map(example)(_*2) shouldEqual exepcted
+  }
 }
