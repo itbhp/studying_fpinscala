@@ -12,4 +12,12 @@ class OptionTest extends FunSuite with Matchers{
     Just(2).map(_.toString) shouldEqual Just("2")
   }
 
+  test("flatMap on None"){
+    None.flatMap(_=>Just(2)) shouldEqual None
+  }
+
+  test("flatMap on Just"){
+    Just(2).flatMap(b => Just(b.toString)) shouldEqual Just("2")
+  }
+
 }

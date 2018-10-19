@@ -5,9 +5,17 @@ sealed trait Maybe[+A]{
     case None => None
     case Just(v) => Just(f(v))
   }
-  def flatMap[B](f: A => Maybe[B]): Maybe[B] = ???
-  def getOrElse[B >: A](default: => B): B = ??? // default is a by name parameter
+
+  def flatMap[B](f: A => Maybe[B]): Maybe[B] = this match {
+    case None => None
+    case Just(v) => f(v)
+  }
+
+  // default is a by name parameter
+  def getOrElse[B >: A](default: => B): B = ???
+
   def orElse[B >: A](ob: => Maybe[B]): Maybe[B] = ???
+
   def filter(f: A => Boolean): Maybe[A] = ???
 }
 
