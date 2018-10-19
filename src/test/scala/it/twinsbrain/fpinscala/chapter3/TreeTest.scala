@@ -16,4 +16,14 @@ class TreeTest extends FunSuite with Matchers {
     val example = Branch(Branch(Leaf(3), Leaf(4)), Branch(Leaf(5), Branch(Leaf(1), Leaf(2))))
     Tree.maximum(example) shouldEqual 5
   }
+
+  test("depth on only a Leaf") {
+    Tree.depth(Leaf(3)) shouldEqual 0
+  }
+
+  test("depth on non simple binary tree") {
+    withClue("Branch(Leaf(1), Branch(Leaf(2), Leaf(3))) depth = "){
+      Tree.depth(Branch(Leaf(1), Branch(Leaf(2), Leaf(3)))) shouldEqual 2
+    }
+  }
 }

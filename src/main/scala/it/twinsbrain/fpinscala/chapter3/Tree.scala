@@ -19,4 +19,9 @@ object Tree{
     }
     loop(0, tree)
   }
+
+  def depth[A](tree: Tree[A]): Int =  tree match {
+    case Leaf(_) => 0
+    case Branch(l, r) => 1 + (depth(l) max depth(r))
+  }
 }
