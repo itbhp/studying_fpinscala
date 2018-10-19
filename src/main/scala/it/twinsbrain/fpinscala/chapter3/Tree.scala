@@ -1,31 +1,29 @@
 package it.twinsbrain.fpinscala.chapter3
 
 sealed trait Tree[+A]
+
 case class Leaf[A](value: A) extends Tree[A]
+
 case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 
-object Tree{
-  def size[A](t: Tree[A]): Int = t match {
-    case Leaf(_) => 1
-    case Branch(l, r) => 1 + size(l) + size(r)
+object Tree {
+  def fold[A, B](tree: Tree[A])(lMap: A => B)(bMap: (Tree[A], Tree[A]) => B): B = tree match {
+    case Leaf(v) => lMap(v)
+    case Branch(l, r) => bMap(l, r)
   }
 
-  def maximum(tree: Tree[Int]): Int =  {
-    def loop(maxInt: Int, t:Tree[Int]): Int = {
-     t match {
-       case Leaf(value) => value max maxInt
-       case Branch(left, right) => loop(maxInt, left) max loop(maxInt, right)
-     }
-    }
-    loop(0, tree)
-  }
+  def size[A](t: Tree[A]): Int =
+    fold(t)(_=>1)((l,r) => 1 + size(l) + size(r))
 
-  def depth[A](tree: Tree[A]): Int =  tree match {
-    case Leaf(_) => 0
-    case Branch(l, r) => 1 + (depth(l) max depth(r))
-  }
+  def maximum(tree: Tree[Int]): Int =
+    fold(tree)(v => v) ((l,r) => maximum(l) max maximum(r))
 
-  def map[A,B](tree: Tree[A])(f:A => B): Tree[B] =  tree match {
+  def depth[A](tree: Tree[A]): Int =
+    fold(tree)(_ => 0)((r, l) => 1 + (depth(l) max depth(r)))
+
+  def map[A, B](tree: Tree[A])(f: A => B): Tree[B] =
+  //    fold(tree)(v => Leaf(f(v)))((l, r) => Branch(map(l)(f), map(r)(f)))
+  tree match {
     case Leaf(v) => Leaf(f(v))
     case Branch(l, r) => Branch(map(l)(f), map(r)(f))
   }
