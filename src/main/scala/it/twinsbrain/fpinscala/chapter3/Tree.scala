@@ -16,7 +16,7 @@ object Tree {
     fold(t)(_ => 1)((l, r) => 1 + size(l) + size(r))
 
   def maximum(tree: Tree[Int]): Int =
-    fold(tree)(v => v)((l, r) => maximum(l) max maximum(r))
+    fold(tree)(identity)((l, r) => maximum(l) max maximum(r))
 
   def depth[A](tree: Tree[A]): Int =
     fold(tree)(_ => 0)((r, l) => 1 + (depth(l) max depth(r)))
