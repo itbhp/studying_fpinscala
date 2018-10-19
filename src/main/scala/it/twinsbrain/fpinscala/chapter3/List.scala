@@ -105,8 +105,8 @@ object List {
     }
   }
 
-  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    if(startsWith(sup, sub)) true
+    else hasSubsequence(tail(sup), sub)
 
-    false
-  }
 }

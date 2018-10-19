@@ -137,7 +137,7 @@ class ListTest extends FunSuite with Matchers{
     startsWith(List(1,2,3,4,5,6,7),List(1,2)) shouldEqual true
   }
 
-  ignore("hasSubsequence"){
+  test("hasSubsequence"){
     hasSubsequence(List(1,2,3,4,5,6,7),List(3,4,5)) shouldEqual true
   }
 }
