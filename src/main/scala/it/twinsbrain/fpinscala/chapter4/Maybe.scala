@@ -12,11 +12,20 @@ sealed trait Maybe[+A]{
   }
 
   // default is a by name parameter
-  def getOrElse[B >: A](default: => B): B = ???
+  def getOrElse[B >: A](default: => B): B = this match {
+    case None => default
+    case Just(v) => v
+  }
 
-  def orElse[B >: A](ob: => Maybe[B]): Maybe[B] = ???
+  def orElse[B >: A](ob: => Maybe[B]): Maybe[B] = this match {
+    case None => ob
+    case Just(v) => this
+  }
 
-  def filter(f: A => Boolean): Maybe[A] = ???
+  def filter(p: A => Boolean): Maybe[A] = this match {
+    case Just(v) if(p(v)) => Just(v)
+    case _ => None
+  }
 }
 
 case class Just[+A](get: A) extends Maybe[A]

@@ -20,4 +20,31 @@ class OptionTest extends FunSuite with Matchers{
     Just(2).flatMap(b => Just(b.toString)) shouldEqual Just("2")
   }
 
+  test("getOrElse on Just"){
+    Just(2).getOrElse(0) shouldEqual 2
+  }
+
+  test("getOrElse on None"){
+    None.getOrElse(0) shouldEqual 0
+  }
+
+  test("orElse on Just"){
+    Just(2).orElse(Just(0)) shouldEqual Just(2)
+  }
+
+  test("orElse on None"){
+    None.orElse(Just(0)) shouldEqual Just(0)
+  }
+
+  test("filter on Just true"){
+    Just(2).filter(_%2==0) shouldEqual Just(2)
+  }
+
+  test("filter on Just false") {
+    Just(2).filter(_ % 3 == 0) shouldEqual None
+  }
+
+  test("filter on None"){
+    None.orElse(Just(0)) shouldEqual Just(0)
+  }
 }
