@@ -31,4 +31,9 @@ class StreamTest extends FunSuite with Matchers{
   test("drop more"){
     Stream(1,2,3,4).drop(5).toList shouldEqual List()
   }
+
+  test("forAll"){
+    Stream(2,4,6).forAll(_ % 2 == 0) shouldEqual true
+    Stream(2,3,6).forAll(_ % 2 == 0) shouldEqual false
+  }
 }
