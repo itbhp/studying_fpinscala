@@ -38,10 +38,7 @@ object Maybe{
   def map2[A,B,C](a: Maybe[A], b: Maybe[B])(f: (A,B) => C) : Maybe[C] =
     a.flatMap(valA => b.map(valB => f(valA,valB)))
 
-  def sequence[A](xs: List[Maybe[A]]): Maybe[List[A]] = xs match {
-    case Nil => Just(Nil)
-    case y::ys => y.flatMap(valy => sequence(ys).map(valS => valy::valS))
-  }
+  def sequence[A](xs: List[Maybe[A]]): Maybe[List[A]] =  traverse(xs)(identity)
 
   def traverse[A, B](xs: List[A])(f: A => Maybe[B]): Maybe[List[B]] = xs match {
     case Nil => Just(Nil)
