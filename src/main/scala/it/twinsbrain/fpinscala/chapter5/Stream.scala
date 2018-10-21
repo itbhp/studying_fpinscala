@@ -15,9 +15,12 @@ sealed trait Stream[+A] {
     go(this, Nil).reverse
   }
 
-  def take(n: Int) = ???
+  def take(n: Int): Stream[A] = this match {
+    case Cons(h, t) if n > 0 => Stream.cons(h(), t().take(n - 1))
+    case _ => Empty
+  }
 
-  def drop(n: Int) = ???
+  def drop(n: Int): Stream[A] = ???
 }
 
 case object Empty extends Stream[Nothing]

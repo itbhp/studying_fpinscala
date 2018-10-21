@@ -4,8 +4,19 @@ import org.scalatest._
 
 class StreamTest extends FunSuite with Matchers{
 
-  import Stream._
   test("toList"){
-    cons(1,cons(2,cons(3,cons(4,Stream.empty)))).toList shouldEqual List(1,2,3,4)
+    Stream(1,2,3,4).toList shouldEqual List(1,2,3,4)
+  }
+
+  test("take on empty"){
+    Stream().take(2) shouldEqual Stream()
+  }
+
+  test("take proper"){
+    Stream(1,2,3,4).take(2).toList shouldEqual List(1,2)
+  }
+
+  test("take more"){
+    Stream(1,2,3,4).take(5).toList shouldEqual List(1,2,3,4)
   }
 }
