@@ -40,25 +40,43 @@ class EitherTest extends FunSuite with Matchers {
   test("map2") {
     withClue("Left") {
       val value: Either[String, Int] = Left("enough!")
-      value.map2(Right(0.0))((a,b) => a.toDouble + b) shouldEqual Left("enough!")
+      value.map2(Right(0.0))((a, b) => a.toDouble + b) shouldEqual Left("enough!")
     }
 
     withClue("Right") {
-      Right(4).map2(Right(0.0))((a,b) => a.toDouble + b) shouldEqual Right(4.0)
+      Right(4).map2(Right(0.0))((a, b) => a.toDouble + b) shouldEqual Right(4.0)
     }
   }
 
   import Either._
 
-  test("sequence on Nil"){
+  test("sequence on Nil") {
     sequence(Nil) shouldEqual Right(Nil)
   }
 
   test("sequence with Lefts") {
-    sequence(List(Right(4),Right(5),Left("1"),Right(3),Left("2"))) shouldEqual Left("1")
+    sequence(List(Right(4), Right(5), Left("1"), Right(3), Left("2"))) shouldEqual Left("1")
   }
 
   test("sequence with Rights only") {
-    sequence(List(Right(4),Right(5),Right(3))) shouldEqual Right(List(4,5,3))
+    sequence(List(Right(4), Right(5), Right(3))) shouldEqual Right(List(4, 5, 3))
   }
+
+  val f: Int => Either[Exception, Int] = i => Try(1 / i)
+
+  test("traverse on Nil") {
+    traverse(Nil)(f) shouldEqual Right(Nil)
+  }
+
+  test("traverse with no Exception") {
+    traverse(List(4, 5, 3))(f) shouldEqual Right(List(1 / 4, 1 / 5, 1 / 3))
+  }
+
+  test("traverse with Exception") {
+    traverse(List(4, 5, 0, 3, 0))(f) match {
+      case Right(_) => fail()
+      case Left(e) => e shouldBe a [ArithmeticException]
+    }
+  }
+
 }
