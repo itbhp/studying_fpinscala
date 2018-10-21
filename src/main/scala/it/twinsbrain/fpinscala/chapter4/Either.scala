@@ -24,3 +24,10 @@ sealed trait Either[+E, +A] {
 case class Left[+E](value: E) extends Either[E, Nothing]
 
 case class Right[+A](value: A) extends Either[Nothing, A]
+
+object Either{
+  def sequence[E, A](es: List[Either[E, A]]): Either[E, List[A]] = es match {
+    case Nil => Right(Nil)
+    case x::xs => x.flatMap(xVal => sequence(xs).map(ys => xVal::ys))
+  }
+}

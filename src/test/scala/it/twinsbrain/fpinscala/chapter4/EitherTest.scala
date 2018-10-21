@@ -47,4 +47,18 @@ class EitherTest extends FunSuite with Matchers {
       Right(4).map2(Right(0.0))((a,b) => a.toDouble + b) shouldEqual Right(4.0)
     }
   }
+
+  import Either._
+
+  test("sequence on Nil"){
+    sequence(Nil) shouldEqual Right(Nil)
+  }
+
+  test("sequence with Lefts") {
+    sequence(List(Right(4),Right(5),Left("1"),Right(3),Left("2"))) shouldEqual Left("1")
+  }
+
+  test("sequence with Rights only") {
+    sequence(List(Right(4),Right(5),Right(3))) shouldEqual Right(List(4,5,3))
+  }
 }
