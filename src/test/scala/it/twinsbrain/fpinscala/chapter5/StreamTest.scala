@@ -48,4 +48,12 @@ class StreamTest extends FunSuite with Matchers{
   test("dropWhile"){
     Stream(2,4,8,10,3,6).takeWhile(_ % 2 == 0).toList shouldEqual List(2,4,8,10)
   }
+
+  test("headOption on Empty"){
+    Stream.empty[Int].headOption shouldEqual None
+  }
+
+  test("headOption on non Empty"){
+    Stream(1,2,3).headOption shouldEqual Some(1)
+  }
 }

@@ -1,11 +1,6 @@
 package it.twinsbrain.fpinscala.chapter5
 
 sealed trait Stream[+A] {
-  def headOption: Option[A] = this match {
-    case Empty => None
-    case Cons(h, _) => Some(h())
-  }
-
   def toList: List[A] = {
     def go(as: Stream[A], acc: List[A]): List[A] = as match {
       case Empty => acc
@@ -34,11 +29,14 @@ sealed trait Stream[+A] {
   def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
   def takeWhile(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty: Stream[A])((a,b) => {
+    foldRight(Stream.empty: Stream[A])((a, b) => {
       if (p(a))
         Stream.cons(a, b)
       else Stream.empty
     })
+
+  def headOption: Option[A] = foldRight(None:Option[A])((a, _) => Some(a))
+
 }
 
 case object Empty extends Stream[Nothing]
