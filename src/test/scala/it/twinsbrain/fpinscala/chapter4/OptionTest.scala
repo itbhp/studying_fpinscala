@@ -47,19 +47,25 @@ class OptionTest extends FunSuite with Matchers{
   test("filter on None"){
     None.orElse(Just(0)) shouldEqual Just(0)
   }
+  import Maybe._
 
   test("sequence on Nil"){
-    import Maybe._
     sequence(List()) shouldEqual Just(List())
   }
 
   test("sequence without None"){
-    import Maybe._
     sequence(List(Just(2),Just(3),Just(4))) shouldEqual Just(List(2,3,4))
   }
 
   test("sequence with None"){
-    import Maybe._
     sequence(List(Just(2),None,Just(4))) shouldEqual None
+  }
+
+  test("traverse with Nil"){
+    traverse(Nil)(Just(_)) shouldEqual Just(Nil)
+  }
+
+  test("traverse"){
+    traverse(List(2, 3))(Just(_)) shouldEqual Just(List(2,3))
   }
 }

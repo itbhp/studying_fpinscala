@@ -42,4 +42,9 @@ object Maybe{
     case Nil => Just(Nil)
     case y::ys => y.flatMap(valy => sequence(ys).map(valS => valy::valS))
   }
+
+  def traverse[A, B](xs: List[A])(f: A => Maybe[B]): Maybe[List[B]] = xs match {
+    case Nil => Just(Nil)
+    case y::ys => f(y).flatMap(b => traverse(ys)(f).map(cs => b::cs))
+  }
 }
