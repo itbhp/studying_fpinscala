@@ -21,17 +21,24 @@ sealed trait Stream[+A] {
   }
 
   def drop(n: Int): Stream[A] = this match {
-    case Cons(_, t) if n > 0 => t().drop(n-1)
+    case Cons(_, t) if n > 0 => t().drop(n - 1)
     case _ => this
   }
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
     this match {
-      case Cons(h,t) => f(h(), t().foldRight(z)(f))
+      case Cons(h, t) => f(h(), t().foldRight(z)(f))
       case _ => z
     }
 
-  def forAll(p: A => Boolean): Boolean = foldRight(true)((a,b) => p(a) && b)
+  def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
+
+  def takeWhile(p: A => Boolean): Stream[A] =
+    foldRight(Stream.empty: Stream[A])((a,b) => {
+      if (p(a))
+        Stream.cons(a, b)
+      else Stream.empty
+    })
 }
 
 case object Empty extends Stream[Nothing]
