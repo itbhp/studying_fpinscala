@@ -24,6 +24,12 @@ sealed trait Stream[+A] {
     case Cons(_, t) if n > 0 => t().drop(n-1)
     case _ => this
   }
+
+  def foldRight[B](z: => B)(f: (A, => B) => B): B =
+    this match {
+      case Cons(h,t) => f(h(), t().foldRight(z)(f))
+      case _ => z
+    }
 }
 
 case object Empty extends Stream[Nothing]
