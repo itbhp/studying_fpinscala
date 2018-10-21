@@ -1,6 +1,15 @@
 package it.twinsbrain.fpinscala.chapter5
 
-sealed trait Stream[+A]
+sealed trait Stream[+A]{
+  def headOption: Option[A] = this match {
+    case Empty => None
+    case Cons(h, _) => Some(h())
+  }
+  def toList: List[A] = this match {
+    case Empty => Nil
+    case Cons(h, t) => h()::t().toList
+  }
+}
 
 case object Empty extends Stream[Nothing]
 
