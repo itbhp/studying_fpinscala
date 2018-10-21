@@ -31,3 +31,15 @@ sealed trait Maybe[+A]{
 case class Just[+A](get: A) extends Maybe[A]
 
 case object None extends Maybe[Nothing]
+
+object Maybe{
+  def lift[A,B](f: A => B) : Maybe[A] => Maybe[B] = (a: Maybe[A]) => a.map(f)
+
+  def map2[A,B,C](a: Maybe[A], b: Maybe[B])(f: (A,B) => C) : Maybe[C] =
+    a.flatMap(valA => b.map(valB => f(valA,valB)))
+
+  def sequence[A](xs: List[Maybe[A]]): Maybe[List[A]] = xs match {
+    case Nil => Just(Nil)
+    case y::ys => y.flatMap(valy => sequence(ys).map(valS => valy::valS))
+  }
+}
