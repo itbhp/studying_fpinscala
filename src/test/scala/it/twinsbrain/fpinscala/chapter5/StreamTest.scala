@@ -37,6 +37,14 @@ class StreamTest extends FunSuite with Matchers{
     Stream(2,3,6).forAll(_ % 2 == 0) shouldEqual false
   }
 
+  test("dropWhile on empty"){
+    Stream.empty[Int].takeWhile(_ % 2 == 0).toList shouldEqual Nil
+  }
+
+  test("dropWhile failing fast"){
+    Stream(1,2,3).takeWhile(_ % 2 == 0).toList shouldEqual Nil
+  }
+
   test("dropWhile"){
     Stream(2,4,8,10,3,6).takeWhile(_ % 2 == 0).toList shouldEqual List(2,4,8,10)
   }
