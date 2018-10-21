@@ -19,4 +19,16 @@ class StreamTest extends FunSuite with Matchers{
   test("take more"){
     Stream(1,2,3,4).take(5).toList shouldEqual List(1,2,3,4)
   }
+
+  test("drop on empty"){
+    Stream().drop(2) shouldEqual Stream()
+  }
+
+  test("drop proper"){
+    Stream(1,2,3,4).drop(2).toList shouldEqual List(3,4)
+  }
+
+  test("drop more"){
+    Stream(1,2,3,4).drop(5).toList shouldEqual List()
+  }
 }
