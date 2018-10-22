@@ -28,6 +28,9 @@ sealed trait Stream[+A] {
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
+  def map[B](f: A => B): Stream[B] =
+    foldRight(Empty:Stream[B])((elem,acc) => Stream.cons(f(elem), acc))
+
   def takeWhile(p: A => Boolean): Stream[A] =
     foldRight(Stream.empty: Stream[A])((a, b) => {
       if (p(a))

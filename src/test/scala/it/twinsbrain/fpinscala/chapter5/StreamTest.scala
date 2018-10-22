@@ -2,58 +2,66 @@ package it.twinsbrain.fpinscala.chapter5
 
 import org.scalatest._
 
-class StreamTest extends FunSuite with Matchers{
+class StreamTest extends FunSuite with Matchers {
 
-  test("toList"){
-    Stream(1,2,3,4).toList shouldEqual List(1,2,3,4)
+  test("toList") {
+    Stream(1, 2, 3, 4).toList shouldEqual List(1, 2, 3, 4)
   }
 
-  test("take on empty"){
+  test("take on empty") {
     Stream().take(2) shouldEqual Stream()
   }
 
-  test("take proper"){
-    Stream(1,2,3,4).take(2).toList shouldEqual List(1,2)
+  test("take proper") {
+    Stream(1, 2, 3, 4).take(2).toList shouldEqual List(1, 2)
   }
 
-  test("take more"){
-    Stream(1,2,3,4).take(5).toList shouldEqual List(1,2,3,4)
+  test("take more") {
+    Stream(1, 2, 3, 4).take(5).toList shouldEqual List(1, 2, 3, 4)
   }
 
-  test("drop on empty"){
+  test("drop on empty") {
     Stream().drop(2) shouldEqual Stream()
   }
 
-  test("drop proper"){
-    Stream(1,2,3,4).drop(2).toList shouldEqual List(3,4)
+  test("drop proper") {
+    Stream(1, 2, 3, 4).drop(2).toList shouldEqual List(3, 4)
   }
 
-  test("drop more"){
-    Stream(1,2,3,4).drop(5).toList shouldEqual List()
+  test("drop more") {
+    Stream(1, 2, 3, 4).drop(5).toList shouldEqual List()
   }
 
-  test("forAll"){
-    Stream(2,4,6).forAll(_ % 2 == 0) shouldEqual true
-    Stream(2,3,6).forAll(_ % 2 == 0) shouldEqual false
+  test("forAll") {
+    Stream(2, 4, 6).forAll(_ % 2 == 0) shouldEqual true
+    Stream(2, 3, 6).forAll(_ % 2 == 0) shouldEqual false
   }
 
-  test("dropWhile on empty"){
+  test("dropWhile on empty") {
     Stream.empty[Int].takeWhile(_ % 2 == 0).toList shouldEqual Nil
   }
 
-  test("dropWhile failing fast"){
-    Stream(1,2,3).takeWhile(_ % 2 == 0).toList shouldEqual Nil
+  test("dropWhile failing fast") {
+    Stream(1, 2, 3).takeWhile(_ % 2 == 0).toList shouldEqual Nil
   }
 
-  test("dropWhile"){
-    Stream(2,4,8,10,3,6).takeWhile(_ % 2 == 0).toList shouldEqual List(2,4,8,10)
+  test("dropWhile") {
+    Stream(2, 4, 8, 10, 3, 6).takeWhile(_ % 2 == 0).toList shouldEqual List(2, 4, 8, 10)
   }
 
-  test("headOption on Empty"){
+  test("headOption on Empty") {
     Stream.empty[Int].headOption shouldEqual None
   }
 
-  test("headOption on non Empty"){
-    Stream(1,2,3).headOption shouldEqual Some(1)
+  test("headOption on non Empty") {
+    Stream(1, 2, 3).headOption shouldEqual Some(1)
+  }
+
+  test("map on Empty") {
+    Empty.map((x:Any) => x.toString) shouldEqual Empty
+  }
+
+  test("map on non Empty") {
+    Stream(1, 2, 3, 4).map((x:Int) => x * 3).toList shouldEqual List(3, 6, 9, 12)
   }
 }
