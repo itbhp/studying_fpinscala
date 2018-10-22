@@ -26,19 +26,17 @@ sealed trait Stream[+A] {
       case _ => z
     }
 
-  def filter(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty[A])((elem, acc) => if(p(elem)) Stream.cons(elem, acc) else acc)
-
-  def append[B>:A](stream: => Stream[B]): Stream[B] = this match {
-    case Empty => stream
-    case Cons(h,t) => Stream.cons(h(), t().append(stream))
-  }
+  def append[B >: A](stream: => Stream[B]): Stream[B] =
+    foldRight(stream)((elem,acc) => Stream.cons(elem, acc))
 
   def flatMap[B](f: A => Stream[B]): Stream[B] =
-    foldRight(Empty:Stream[B])((elem, acc) => f(elem).append(acc))
+    foldRight(Empty: Stream[B])((elem, acc) => f(elem).append(acc))
 
   def map[B](f: A => B): Stream[B] =
-    foldRight(Empty:Stream[B])((elem,acc) => Stream.cons(f(elem), acc))
+    foldRight(Empty: Stream[B])((elem, acc) => Stream.cons(f(elem), acc))
+
+  def filter(p: A => Boolean): Stream[A] =
+    foldRight(Stream.empty[A])((elem, acc) => if (p(elem)) Stream.cons(elem, acc) else acc)
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
@@ -49,7 +47,7 @@ sealed trait Stream[+A] {
       else Stream.empty
     })
 
-  def headOption: Option[A] = foldRight(None:Option[A])((a, _) => Some(a))
+  def headOption: Option[A] = foldRight(None: Option[A])((a, _) => Some(a))
 
 }
 
