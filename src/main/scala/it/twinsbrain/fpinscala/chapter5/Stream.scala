@@ -26,10 +26,18 @@ sealed trait Stream[+A] {
       case _ => z
     }
 
-  def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
+  def append[B>:A](stream: Stream[B]): Stream[B] = this match {
+    case Empty => stream
+    case Cons(h,t) => Stream.cons(h(), t().append(stream))
+  }
+
+  def flatMap[B](f: A => Stream[B]): Stream[B] =
+    foldRight(Empty:Stream[B])((elem, acc) => f(elem).append(acc))
 
   def map[B](f: A => B): Stream[B] =
     foldRight(Empty:Stream[B])((elem,acc) => Stream.cons(f(elem), acc))
+
+  def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
   def takeWhile(p: A => Boolean): Stream[A] =
     foldRight(Stream.empty: Stream[A])((a, b) => {

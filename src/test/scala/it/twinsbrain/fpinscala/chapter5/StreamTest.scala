@@ -64,4 +64,20 @@ class StreamTest extends FunSuite with Matchers {
   test("map on non Empty") {
     Stream(1, 2, 3, 4).map((x:Int) => x * 3).toList shouldEqual List(3, 6, 9, 12)
   }
+
+  test("flatMap on Empty") {
+    Empty.flatMap((x:Any) => Stream(x.toString)) shouldEqual Empty
+  }
+
+  test("flatMap on non Empty") {
+    Stream(1, 2, 3, 4).flatMap((x:Int) => Stream(x * 3)).toList shouldEqual List(3, 6, 9, 12)
+  }
+
+  test("append stream to empty one"){
+    Stream.empty[Int].append(Stream(1,2)).toList shouldEqual List(1,2)
+  }
+
+  test("append stream to non empty one"){
+    Stream(3,4).append(Stream(1,2)).toList shouldEqual List(3,4,1,2)
+  }
 }
