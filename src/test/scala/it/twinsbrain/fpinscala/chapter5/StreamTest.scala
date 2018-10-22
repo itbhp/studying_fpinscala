@@ -80,4 +80,12 @@ class StreamTest extends FunSuite with Matchers {
   test("append stream to non empty one"){
     Stream(3,4).append(Stream(1,2)).toList shouldEqual List(3,4,1,2)
   }
+
+  test("filter empty stream"){
+    Stream.empty[Int].filter(_%2 == 0).toList shouldEqual List()
+  }
+
+  test("filter non empty stream"){
+    Stream(3,4).filter(_%2 == 0).toList shouldEqual List(4)
+  }
 }

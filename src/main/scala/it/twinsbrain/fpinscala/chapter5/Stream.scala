@@ -26,7 +26,10 @@ sealed trait Stream[+A] {
       case _ => z
     }
 
-  def append[B>:A](stream: Stream[B]): Stream[B] = this match {
+  def filter(p: A => Boolean): Stream[A] =
+    foldRight(Stream.empty[A])((elem, acc) => if(p(elem)) Stream.cons(elem, acc) else acc)
+
+  def append[B>:A](stream: => Stream[B]): Stream[B] = this match {
     case Empty => stream
     case Cons(h,t) => Stream.cons(h(), t().append(stream))
   }
