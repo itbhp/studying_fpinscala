@@ -74,7 +74,7 @@ sealed trait Stream[+A] {
     Stream.unfold(this){
       case Cons(h, t) => Some(Cons(h, t), t())
       case Empty => None
-    } append(Stream(Empty))
+    } append Stream(Empty)
 }
 
 case object Empty extends Stream[Nothing]
