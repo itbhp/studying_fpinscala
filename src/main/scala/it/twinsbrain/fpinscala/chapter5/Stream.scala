@@ -62,7 +62,7 @@ sealed trait Stream[+A] {
       case _ => None
     }
 
-  def startsWith[A](s: Stream[A]): Boolean = this.zipAll(s).takeWhile(!_._2.isEmpty).forAll {
+  def startsWith[A](s: Stream[A]): Boolean = this.zipAll(s).takeWhile(_._2.isDefined).forAll {
     case (h1, h2) => h1 == h2
   }
 
