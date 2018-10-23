@@ -88,4 +88,11 @@ class StreamTest extends FunSuite with Matchers {
   test("filter non empty stream"){
     Stream(3,4).filter(_%2 == 0).toList shouldEqual List(4)
   }
+
+  import Stream._
+
+  test("constant infinite stream"){
+    constant(1).take(3).toList shouldEqual List(1,1,1)
+    constant(1).take(6).toList shouldEqual List(1,1,1,1,1,1)
+  }
 }
