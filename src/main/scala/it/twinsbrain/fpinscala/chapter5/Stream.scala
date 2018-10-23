@@ -86,11 +86,4 @@ object Stream {
       case (Empty, Cons(_, _)) => None
       case (Cons(h1, t1), Cons(h2, t2)) => Some(f(h1(), h2()), (t1(), t2()))
     }
-
-  //    (as, bs) match {
-  //      case (Nil, Nil) => Nil
-  //      case (Cons(_, _), Nil) => Nil
-  //      case (Nil, Cons(_, _)) => Nil
-  //      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), zipWith(t1, t2)(f))
-  //    }
 }
