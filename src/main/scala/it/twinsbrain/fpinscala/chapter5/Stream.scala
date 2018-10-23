@@ -2,9 +2,9 @@ package it.twinsbrain.fpinscala.chapter5
 
 sealed trait Stream[+A] {
 
-  override def toString: String = this match{
+  override def toString: String = this match {
     case Empty => "empty"
-    case Cons(h, t) => "{"+h().toString+","+t().toString+"}"
+    case Cons(h, t) => "{" + h().toString + "," + t().toString + "}"
   }
 
   def toList: List[A] = {
@@ -66,15 +66,22 @@ sealed trait Stream[+A] {
       case _ => None
     }
 
-  def startsWith(s: Stream[A]): Boolean = this.zipAll(s).takeWhile(_._2.isDefined).forAll {
+  def startsWith[A](s2: Stream[A]): Boolean = this.zipAll(s2).takeWhile(_._2.isDefined).forAll {
     case (h1, h2) => h1 == h2
   }
 
   def tails: Stream[Stream[A]] =
-    Stream.unfold(this){
+    Stream.unfold(this) {
       case Cons(h, t) => Some(Cons(h, t), t())
       case Empty => None
     } append Stream(Empty)
+
+
+
+  def exists(p: A => Boolean): Boolean = filter(p).headOption.map(_=>true).getOrElse(false)
+
+  //  def hasSubsequence[A](s: Stream[A]): Boolean =
+  //    tails exists (_ startsWith s)
 }
 
 case object Empty extends Stream[Nothing]

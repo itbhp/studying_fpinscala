@@ -149,4 +149,8 @@ class StreamTest extends FunSuite with Matchers {
       toTest => toTest._1.flatMap( i => toTest._2.map(l => l.toList shouldEqual expected(i)))
     }
   }
+
+  test("exists"){
+    Stream(1,2,3,4,5).exists(_%3 == 0) shouldBe true
+  }
 }
