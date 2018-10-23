@@ -1,8 +1,12 @@
 package it.twinsbrain.fpinscala.chapter5
 
-import it.twinsbrain.fpinscala.chapter5
-
 sealed trait Stream[+A] {
+
+  override def toString: String = this match{
+    case Empty => "empty"
+    case Cons(h, t) => "{"+h().toString+","+t().toString+"}"
+  }
+
   def toList: List[A] = {
     def go(as: Stream[A], acc: List[A]): List[A] = as match {
       case Empty => acc
@@ -66,6 +70,11 @@ sealed trait Stream[+A] {
     case (h1, h2) => h1 == h2
   }
 
+  def tails: Stream[Stream[A]] =
+    Stream.unfold(this){
+      case Cons(h, t) => Some(Cons(h, t), t())
+      case Empty => None
+    } append(Stream(Empty))
 }
 
 case object Empty extends Stream[Nothing]

@@ -133,4 +133,20 @@ class StreamTest extends FunSuite with Matchers {
   test("startsWith failure"){
     Stream(1,2,3,4,5,6).startsWith(Stream(2,3)) shouldBe false
   }
+
+  test("startsWith on empty"){
+    Stream().startsWith(Stream(2,3)) shouldBe false
+  }
+
+  test("tails"){
+    val expected = Array(List(1,2,3), List(2,3), List(3), Nil)
+
+    val tails = Stream(1, 2, 3).tails
+
+    tails.toList.size shouldBe 4
+
+    from(0).take(4).zipAll(tails).toList.flatMap{
+      toTest => toTest._1.flatMap( i => toTest._2.map(l => l.toList shouldEqual expected(i)))
+    }
+  }
 }
