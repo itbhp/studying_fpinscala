@@ -95,4 +95,9 @@ class StreamTest extends FunSuite with Matchers {
     constant(1).take(3).toList shouldEqual List(1,1,1)
     constant(1).take(6).toList shouldEqual List(1,1,1,1,1,1)
   }
+
+  test("natural numbers infinite stream"){
+    from(1).take(3).toList shouldEqual List(1,2,3)
+    from(4).take(6).toList shouldEqual List(4,5,6,7,8,9)
+  }
 }
