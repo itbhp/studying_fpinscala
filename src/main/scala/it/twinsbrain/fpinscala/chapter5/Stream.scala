@@ -45,11 +45,10 @@ sealed trait Stream[+A] {
     }
 
   def takeWhile(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty: Stream[A])((a, b) => {
-      if (p(a))
-        Stream.cons(a, b)
-      else Stream.empty
-    })
+    Stream.unfold((this)){
+      case Cons(h,t) if p(h()) => Some(h(), t())
+      case _ => None
+    }
 
   def headOption: Option[A] = foldRight(None: Option[A])((a, _) => Some(a))
 
