@@ -38,10 +38,11 @@ sealed trait Stream[+A] {
       case _ => None
     }
 
-  def take(n: Int): Stream[A] = this match {
-    case Cons(h, t) if n > 0 => Stream.cons(h(), t().take(n - 1))
-    case _ => Empty
-  }
+  def take(n: Int): Stream[A] =
+    Stream.unfold((this, n)){
+      case (Cons(h,t), count) if count > 0 => Some(h(), (t(), count -1))
+      case _ => None
+    }
 
   def takeWhile(p: A => Boolean): Stream[A] =
     foldRight(Stream.empty: Stream[A])((a, b) => {
