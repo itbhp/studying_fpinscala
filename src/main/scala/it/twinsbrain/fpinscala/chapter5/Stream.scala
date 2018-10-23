@@ -39,14 +39,14 @@ sealed trait Stream[+A] {
     }
 
   def take(n: Int): Stream[A] =
-    Stream.unfold((this, n)){
-      case (Cons(h,t), count) if count > 0 => Some(h(), (t(), count -1))
+    Stream.unfold((this, n)) {
+      case (Cons(h, t), count) if count > 0 => Some(h(), (t(), count - 1))
       case _ => None
     }
 
   def takeWhile(p: A => Boolean): Stream[A] =
-    Stream.unfold((this)){
-      case Cons(h,t) if p(h()) => Some(h(), t())
+    Stream.unfold((this)) {
+      case Cons(h, t) if p(h()) => Some(h(), t())
       case _ => None
     }
 
@@ -78,4 +78,19 @@ object Stream {
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] =
     f(z).map { case (value, state) => cons(value, unfold(state)(f)) }.getOrElse(empty)
+
+  def zipWith[A, B, C](as: Stream[A], bs: Stream[B])(f: (A, B) => C): Stream[C] =
+    unfold((as, bs)) {
+      case (Empty, Empty) => None
+      case (Cons(_, _), Empty) => None
+      case (Empty, Cons(_, _)) => None
+      case (Cons(h1, t1), Cons(h2, t2)) => Some(f(h1(), h2()), (t1(), t2()))
+    }
+
+  //    (as, bs) match {
+  //      case (Nil, Nil) => Nil
+  //      case (Cons(_, _), Nil) => Nil
+  //      case (Nil, Cons(_, _)) => Nil
+  //      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1,h2), zipWith(t1, t2)(f))
+  //    }
 }

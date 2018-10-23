@@ -105,4 +105,16 @@ class StreamTest extends FunSuite with Matchers {
     fibs().take(3).toList shouldEqual List(0,1,1)
     fibs().take(6).toList shouldEqual List(0,1,1,2,3,5)
   }
+
+  test("zipWith on stream empty"){
+   zipWith(Stream.empty[Int], Stream(1,2))((_,_)).toList shouldEqual Nil
+  }
+
+  test("zipWith on stream same size"){
+    zipWith(Stream("a","b"), Stream(1,2))((_,_)).toList shouldEqual List(("a",1),("b",2))
+  }
+
+  test("zipWith on stream with different size"){
+    zipWith(Stream("a","b","c"), Stream(1,2))((_,_)).toList shouldEqual List(("a",1),("b",2))
+  }
 }
