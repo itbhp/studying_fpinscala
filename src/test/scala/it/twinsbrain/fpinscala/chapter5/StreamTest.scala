@@ -100,4 +100,9 @@ class StreamTest extends FunSuite with Matchers {
     from(1).take(3).toList shouldEqual List(1,2,3)
     from(4).take(6).toList shouldEqual List(4,5,6,7,8,9)
   }
+
+  test("fibs infinite stream of fibonacci numbers"){
+    fibs().take(3).toList shouldEqual List(0,1,1)
+    fibs().take(6).toList shouldEqual List(0,1,1,2,3,5)
+  }
 }

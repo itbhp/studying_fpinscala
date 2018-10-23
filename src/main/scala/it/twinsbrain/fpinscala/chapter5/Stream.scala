@@ -70,4 +70,12 @@ object Stream {
   def constant[A](a: A): Stream[A] = cons(a, constant(a))
 
   def from(n: Int): Stream[Int] = cons(n, from(n+1))
+
+  def fibs(): Stream[Int] = {
+    def loop(prev: Int, curr:Int): Stream[Int] = {
+      val next = curr + prev
+      cons(prev, cons(curr,loop(next, next + curr)))
+    }
+    loop(0,1)
+  }
 }
