@@ -27,7 +27,7 @@ sealed trait Stream[+A] {
     }
 
   def append[B >: A](stream: => Stream[B]): Stream[B] =
-    foldRight(stream)((elem,acc) => Stream.cons(elem, acc))
+    foldRight(stream)((elem, acc) => Stream.cons(elem, acc))
 
   def flatMap[B](f: A => Stream[B]): Stream[B] =
     foldRight(Empty: Stream[B])((elem, acc) => f(elem).append(acc))
@@ -67,15 +67,13 @@ object Stream {
   def apply[A](as: A*): Stream[A] =
     if (as.isEmpty) empty else cons(as.head, apply(as.tail: _*))
 
-  def constant[A](a: A): Stream[A] = cons(a, constant(a))
+  def constant[A](a: A): Stream[A] = unfold(a)(x => Some(x, x))
 
-  def from(n: Int): Stream[Int] = cons(n, from(n+1))
+  def from(n: Int): Stream[Int] = unfold(n)(x => Some(x, x + 1))
 
-  def fibs(): Stream[Int] = {
-    def loop(prev: Int, curr:Int): Stream[Int] = {
-      val next = curr + prev
-      cons(prev, cons(curr,loop(next, next + curr)))
-    }
-    loop(0,1)
-  }
+  def fibs(): Stream[Int] = unfold((0, 1)) { case (prev, curr) => Some(prev, (curr, prev + curr)) }
+
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] =
+    f(z).map { case (value, state) => cons(value, unfold(state)(f)) }.getOrElse(empty)
 }
