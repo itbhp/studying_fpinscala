@@ -77,7 +77,7 @@ sealed trait Stream[+A] {
     } append Stream(Empty)
 
 
-  def exists(p: A => Boolean): Boolean = filter(p).headOption.map(_ => true).getOrElse(false)
+  def exists(p: A => Boolean): Boolean = filter(p).headOption.exists(_ => true)
 
   def hasSubsequence[A](s: Stream[A]): Boolean =
     tails exists (_ startsWith s)
