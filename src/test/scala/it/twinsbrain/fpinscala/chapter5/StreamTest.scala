@@ -121,4 +121,8 @@ class StreamTest extends FunSuite with Matchers {
   test("zipAll on stream with different size"){
     Stream("a","b","c").zipAll(Stream(1,2)).toList shouldEqual List((Some("a"),Some(1)),(Some("b"),Some(2)), (Some("c"),None))
   }
+
+  test("startsWith"){
+    Stream(1,2,3,4,5,6).startsWith(Stream(1,2,3)) shouldBe true
+  }
 }
