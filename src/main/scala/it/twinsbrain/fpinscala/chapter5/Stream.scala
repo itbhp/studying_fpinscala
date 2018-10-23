@@ -1,5 +1,7 @@
 package it.twinsbrain.fpinscala.chapter5
 
+import it.twinsbrain.fpinscala.chapter5
+
 sealed trait Stream[+A] {
   def toList: List[A] = {
     def go(as: Stream[A], acc: List[A]): List[A] = as match {
@@ -52,19 +54,17 @@ sealed trait Stream[+A] {
 
   def headOption: Option[A] = foldRight(None: Option[A])((a, _) => Some(a))
 
-  def zipAll[B](s2: Stream[B]): Stream[(Option[A],Option[B])] =
-    Stream.unfold((this,s2)){
-      case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()),Some(h2())), (t1(),t2()))
-      case (Empty, Cons(h2, t2)) => Some((None,Some(h2())), (Empty,t2()))
-      case (Cons(h1, t1),Empty) => Some((Some(h1()),None), (t1(),Empty))
+  def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] =
+    Stream.unfold((this, s2)) {
+      case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
+      case (Empty, Cons(h2, t2)) => Some((None, Some(h2())), (Empty, t2()))
+      case (Cons(h1, t1), Empty) => Some((Some(h1()), None), (t1(), Empty))
       case _ => None
     }
 
-  def startsWith[A](s: Stream[A]): Boolean =
-    this.zipAll(s).foldRight(true){
-      case ((h1,h2),_) =>  h2.flatMap(h2Val => h1.map(h1Val => h1Val == h2Val)).getOrElse(false)
-      case _ => false
-    }
+  def startsWith[A](s: Stream[A]): Boolean = this.zipAll(s).takeWhile(!_._2.isEmpty).forAll {
+    case (h1, h2) => h1 == h2
+  }
 
 }
 

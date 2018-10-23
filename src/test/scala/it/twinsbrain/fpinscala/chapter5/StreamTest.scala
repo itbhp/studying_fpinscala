@@ -126,6 +126,10 @@ class StreamTest extends FunSuite with Matchers {
     Stream(1,2,3,4,5,6).startsWith(Stream(1,2,3)) shouldBe true
   }
 
+  test("startsWith non initial failure"){
+    Stream(1,3,4,5,6).startsWith(Stream(1,2,3)) shouldBe false
+  }
+
   test("startsWith failure"){
     Stream(1,2,3,4,5,6).startsWith(Stream(2,3)) shouldBe false
   }
