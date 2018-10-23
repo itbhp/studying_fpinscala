@@ -61,14 +61,9 @@ sealed trait Stream[+A] {
     }
 
   def startsWith[A](s: Stream[A]): Boolean =
-    (this, s) match {
-      case (Empty, _) => false
-      case (_, Empty) => true
-      case (Cons(h1, t1), Cons(h2, t2)) => {
-        if(h1() == h2())
-          t1().startsWith(t2())
-        else false
-      }
+    this.zipAll(s).foldRight(true){
+      case ((h1,h2),_) =>  h2.flatMap(h2Val => h1.map(h1Val => h1Val == h2Val)).getOrElse(false)
+      case _ => false
     }
 
 }

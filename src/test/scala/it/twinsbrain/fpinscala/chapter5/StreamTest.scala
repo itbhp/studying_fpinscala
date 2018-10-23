@@ -122,7 +122,11 @@ class StreamTest extends FunSuite with Matchers {
     Stream("a","b","c").zipAll(Stream(1,2)).toList shouldEqual List((Some("a"),Some(1)),(Some("b"),Some(2)), (Some("c"),None))
   }
 
-  test("startsWith"){
+  test("startsWith success"){
     Stream(1,2,3,4,5,6).startsWith(Stream(1,2,3)) shouldBe true
+  }
+
+  test("startsWith failure"){
+    Stream(1,2,3,4,5,6).startsWith(Stream(2,3)) shouldBe false
   }
 }
