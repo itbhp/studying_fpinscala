@@ -153,4 +153,10 @@ class StreamTest extends FunSuite with Matchers {
   test("exists"){
     Stream(1,2,3,4,5).exists(_%3 == 0) shouldBe true
   }
+
+  test("hasSubsequence"){
+    Stream(1,2,3,4,5).hasSubsequence(Stream()) shouldBe true
+    Stream(1,2,3,4,5).hasSubsequence(Stream(1,2)) shouldBe true
+    Stream(1,2,3,4,5).hasSubsequence(Stream(3,4)) shouldBe true
+  }
 }
