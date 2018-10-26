@@ -161,4 +161,8 @@ class StreamTest extends FunSuite with Matchers {
     Stream(1, 2, 3, 4, 5).hasSubsequence(Stream(1, 2)) shouldBe true
     Stream(1, 2, 3, 4, 5).hasSubsequence(Stream(3, 4)) shouldBe true
   }
+
+  test("scanRight (tails and reduce)"){
+    Stream(1,2,3).scanRight(0)(_ + _).toList shouldEqual List(6,5,3,0)
+  }
 }

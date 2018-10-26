@@ -27,31 +27,33 @@ sealed trait Stream[+A] {
       case _ => z
     }
 
+  import Stream._
+
   def filter(p: A => Boolean): Stream[A] =
-    foldRight(Stream.empty[A])((elem, acc) => if (p(elem)) Stream.cons(elem, acc) else acc)
+    foldRight(empty[A])((elem, acc) => if (p(elem)) cons(elem, acc) else acc)
 
   def forAll(p: A => Boolean): Boolean = foldRight(true)((a, b) => p(a) && b)
 
   def append[B >: A](stream: => Stream[B]): Stream[B] =
-    foldRight(stream)((elem, acc) => Stream.cons(elem, acc))
+    foldRight(stream)((elem, acc) => cons(elem, acc))
 
   def flatMap[B](f: A => Stream[B]): Stream[B] =
     foldRight(Empty: Stream[B])((elem, acc) => f(elem).append(acc))
 
   def map[B](f: A => B): Stream[B] =
-    Stream.unfold(this) {
+    unfold(this) {
       case Cons(h, t) => Some(f(h()), t())
       case _ => None
     }
 
   def take(n: Int): Stream[A] =
-    Stream.unfold((this, n)) {
+    unfold((this, n)) {
       case (Cons(h, t), count) if count > 0 => Some(h(), (t(), count - 1))
       case _ => None
     }
 
   def takeWhile(p: A => Boolean): Stream[A] =
-    Stream.unfold((this)) {
+    unfold(this) {
       case Cons(h, t) if p(h()) => Some(h(), t())
       case _ => None
     }
@@ -59,19 +61,19 @@ sealed trait Stream[+A] {
   def headOption: Option[A] = foldRight(None: Option[A])((a, _) => Some(a))
 
   def zipAll[B](s2: Stream[B]): Stream[(Option[A], Option[B])] =
-    Stream.unfold((this, s2)) {
+    unfold((this, s2)) {
       case (Cons(h1, t1), Cons(h2, t2)) => Some((Some(h1()), Some(h2())), (t1(), t2()))
       case (Empty, Cons(h2, t2)) => Some((None, Some(h2())), (Empty, t2()))
       case (Cons(h1, t1), Empty) => Some((Some(h1()), None), (t1(), Empty))
       case _ => None
     }
 
-  def startsWith[A](s2: Stream[A]): Boolean = this.zipAll(s2).takeWhile(_._2.isDefined).forAll {
+  def startsWith[B >: A](s2: Stream[B]): Boolean = this.zipAll(s2).takeWhile(_._2.isDefined).forAll {
     case (h1, h2) => h1 == h2
   }
 
   def tails: Stream[Stream[A]] =
-    Stream.unfold(this) {
+    unfold(this) {
       case Cons(h, t) => Some(Cons(h, t), t())
       case Empty => None
     } append Stream(Empty)
@@ -79,8 +81,13 @@ sealed trait Stream[+A] {
 
   def exists(p: A => Boolean): Boolean = filter(p).headOption.exists(_ => true)
 
-  def hasSubsequence[A](s: Stream[A]): Boolean =
+  def hasSubsequence[B >: A](s: Stream[B]): Boolean =
     tails exists (_ startsWith s)
+
+  def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] =
+    foldRight(Stream(z))((a, streamAcc) =>
+      streamAcc.headOption.map(h => cons(f(a,h), streamAcc)).getOrElse(empty[B])
+    )
 }
 
 case object Empty extends Stream[Nothing]
