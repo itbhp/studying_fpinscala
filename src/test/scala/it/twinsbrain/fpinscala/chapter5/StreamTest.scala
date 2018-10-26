@@ -146,7 +146,7 @@ class StreamTest extends FunSuite with Matchers {
     tails.toList.size shouldBe 4
 
     from(0).take(4).zipAll(tails).toList.flatMap{
-      toTest => toTest._1.flatMap( i => toTest._2.map(l => l.toList shouldEqual expected(i)))
+      case(index, stream) => index.flatMap( i => stream.map(s => s.toList shouldEqual expected(i)))
     }
   }
 
