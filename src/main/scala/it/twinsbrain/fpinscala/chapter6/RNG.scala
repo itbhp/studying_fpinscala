@@ -12,3 +12,11 @@ case class SimpleRNG(seed: Long) extends RNG {
     (n, nextRNG)
   }
 }
+
+object RNG{
+  def nonNegativeInt(rng: RNG): (Int, RNG) = {
+    val (nextVal, nextGen) = rng.nextInt
+    val nonNegativeNextVal = if(nextVal == Integer.MIN_VALUE) 0 else math.abs(nextVal)
+    (nonNegativeNextVal, nextGen)
+  }
+}
