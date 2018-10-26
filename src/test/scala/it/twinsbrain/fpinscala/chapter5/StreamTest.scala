@@ -145,12 +145,11 @@ class StreamTest extends FunSuite with Matchers {
 
     tails.toList.size shouldBe 4
 
-    from(0).take(4).zipAll(tails).toList.flatMap {
-      case (indexOpt, streamOpt) => for {
-        i <- indexOpt
-        s <- streamOpt
-      } yield s.toList shouldEqual expected(i)
-    }
+    for {
+      (indexOpt, streamOpt) <- from(0).take(4).zipAll(tails).toList
+      i <- indexOpt
+      s <- streamOpt
+    } yield s.toList shouldEqual expected(i)
   }
 
   test("exists") {
