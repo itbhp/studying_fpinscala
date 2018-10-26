@@ -84,7 +84,7 @@ sealed trait Stream[+A] {
   def hasSubsequence[B >: A](s: Stream[B]): Boolean =
     tails exists (_ startsWith s)
 
-  def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] =
+  def scanRight[B](z: => B)(f: (A, => B) => B): Stream[B] =
     foldRight(Stream(z))((a, streamAcc) =>
       streamAcc.headOption.map(h => cons(f(a,h), streamAcc)).getOrElse(empty[B])
     )

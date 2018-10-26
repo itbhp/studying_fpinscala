@@ -162,7 +162,12 @@ class StreamTest extends FunSuite with Matchers {
     Stream(1, 2, 3, 4, 5).hasSubsequence(Stream(3, 4)) shouldBe true
   }
 
-  test("scanRight (tails and reduce)"){
-    Stream(1,2,3).scanRight(0)(_ + _).toList shouldEqual List(6,5,3,0)
+  test("scanRight (tails and reduce)") {
+    Stream(1, 2, 3).scanRight(0)(_ + _).toList shouldEqual List(6, 5, 3, 0)
+  }
+
+  test("scanRight with ordered function") {
+    val expected = List("1+2+3+0", "2+3+0", "3+0", "0")
+    Stream(1, 2, 3).scanRight("0")((a, b) => s"$a+$b").toList shouldEqual expected
   }
 }
