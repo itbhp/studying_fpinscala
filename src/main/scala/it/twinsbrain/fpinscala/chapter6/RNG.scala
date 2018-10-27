@@ -1,5 +1,7 @@
 package it.twinsbrain.fpinscala.chapter6
 
+import scala.annotation.tailrec
+
 trait RNG {
   def nextInt: (Int, RNG)
 }
@@ -28,30 +30,35 @@ object RNG {
     (nonNegativeNextVal, nextGen)
   }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+  def intDouble(rng: RNG): ((Int, Double), RNG) = {
     val (nextInt, nextRNG) = nonNegativeInt(rng)
     val (nextDouble, otherNextRNG) = double(nextRNG)
-    ((nextInt,nextDouble), otherNextRNG)
+    ((nextInt, nextDouble), otherNextRNG)
   }
 
-  def doubleInt(rng: RNG): ((Double,Int), RNG) = {
+  def doubleInt(rng: RNG): ((Double, Int), RNG) = {
     val (nextInt, nextRNG) = nonNegativeInt(rng)
     val (nextDouble, otherNextRNG) = double(nextRNG)
     ((nextDouble, nextInt), otherNextRNG)
   }
 
-  def double3(rng: RNG): ((Double,Double,Double), RNG) =  {
+  def double3(rng: RNG): ((Double, Double, Double), RNG) = {
     val (aValue, aRng) = double(rng)
     val (bValue, bRng) = double(aRng)
     val (cValue, cRng) = double(bRng)
     ((aValue, bValue, cValue), cRng)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) =
-    if (count == 0) (Nil, rng)
-    else {
-      val (nextInt, nextRNG) = nonNegativeInt(rng)
-      val (list, newRNG) = ints(count - 1)(nextRNG)
-      (nextInt :: list, newRNG)
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    @tailrec
+    def loop(c: Int, acc: (List[Int], RNG)): (List[Int], RNG) = {
+      if (c > 0) {
+        val (curList, curRNG) = acc
+        val (nextInt, nextRNG) = curRNG.nextInt
+        loop(c - 1, (nextInt :: curList, nextRNG))
+      } else acc
     }
+
+    loop(count, (Nil, rng))
+  }
 }
