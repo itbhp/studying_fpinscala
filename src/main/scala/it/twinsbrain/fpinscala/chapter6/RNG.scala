@@ -27,4 +27,23 @@ object RNG {
       else (Integer.MAX_VALUE.toDouble - nextVal.toDouble) / Integer.MAX_VALUE.toDouble
     (nonNegativeNextVal, nextGen)
   }
+
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val (nextInt, nextRNG) = nonNegativeInt(rng)
+    val (nextDouble, otherNextRNG) = double(nextRNG)
+    ((nextInt,nextDouble), otherNextRNG)
+  }
+
+  def doubleInt(rng: RNG): ((Double,Int), RNG) = {
+    val (nextInt, nextRNG) = nonNegativeInt(rng)
+    val (nextDouble, otherNextRNG) = double(nextRNG)
+    ((nextDouble, nextInt), otherNextRNG)
+  }
+
+  def double3(rng: RNG): ((Double,Double,Double), RNG) =  {
+    val (aValue, aRng) = double(rng)
+    val (bValue, bRng) = double(aRng)
+    val (cValue, cRng) = double(bRng)
+    ((aValue, bValue, cValue), cRng)
+  }
 }

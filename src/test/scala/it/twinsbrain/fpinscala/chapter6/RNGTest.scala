@@ -23,4 +23,34 @@ class RNGTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers 
     }
   }
 
+  test("random int double pairs ") {
+    forAll { n: Int =>
+      val ((nextInt, nextDouble), _) = intDouble(SimpleRNG(n))
+      nextInt should be >= 0
+      nextInt should be <= Integer.MAX_VALUE
+      nextDouble should be >= 0.0
+      nextDouble should be < 1.0
+    }
+  }
+
+  test("random double int pairs ") {
+    forAll { n: Int =>
+      val ((nextDouble, nextInt), _) = doubleInt(SimpleRNG(n))
+      nextInt should be >= 0
+      nextInt should be <= Integer.MAX_VALUE
+      nextDouble should be >= 0.0
+      nextDouble should be < 1.0
+    }
+  }
+
+  test("random double 3-tuple ") {
+    forAll { n: Int =>
+      val ((a, b, c), _) = double3(SimpleRNG(n))
+      for {v <- Seq(a, b, c)} {
+        v should be >= 0.0
+        v should be < 1.0
+      }
+    }
+  }
+
 }
