@@ -46,4 +46,15 @@ object RNG {
     val (cValue, cRng) = double(bRng)
     ((aValue, bValue, cValue), cRng)
   }
+
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) =
+
+  {
+    var (_, resRNG) = rng.nextInt
+    ((1 to count).map(_ => {
+      val (aVal, rng) = resRNG.nextInt
+      resRNG = rng
+      aVal
+    }).toList, resRNG)
+  }
 }

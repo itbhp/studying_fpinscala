@@ -53,4 +53,15 @@ class RNGTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers 
     }
   }
 
+
+  test("random list of ints") {
+    forAll { n: Int =>
+      val (list, _) = ints(5)(SimpleRNG(n))
+
+      list.size shouldBe 5
+
+      list.map(x => assert(list.count(y => y == x) == 1))
+    }
+  }
+
 }
