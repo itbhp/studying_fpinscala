@@ -15,4 +15,12 @@ class RNGTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers 
     }
   }
 
+  test("random doubles ") {
+    forAll { n: Int =>
+      val (nextVal, _) = double(SimpleRNG(n))
+      nextVal should be >= 0.0
+      nextVal should be < 1.0
+    }
+  }
+
 }

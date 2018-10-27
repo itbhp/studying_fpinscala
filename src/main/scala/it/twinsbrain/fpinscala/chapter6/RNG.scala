@@ -13,10 +13,18 @@ case class SimpleRNG(seed: Long) extends RNG {
   }
 }
 
-object RNG{
+object RNG {
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (nextVal, nextGen) = rng.nextInt
-    val nonNegativeNextVal = if(nextVal == Integer.MIN_VALUE) 0 else math.abs(nextVal)
+    val nonNegativeNextVal = if (nextVal == Integer.MIN_VALUE) 0 else math.abs(nextVal)
+    (nonNegativeNextVal, nextGen)
+  }
+
+  def double(rng: RNG): (Double, RNG) = {
+    val (nextVal, nextGen) = nonNegativeInt(rng)
+    val nonNegativeNextVal =
+      if (nextVal == 0) 0
+      else (Integer.MAX_VALUE.toDouble - nextVal.toDouble) / Integer.MAX_VALUE.toDouble
     (nonNegativeNextVal, nextGen)
   }
 }
