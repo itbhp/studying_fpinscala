@@ -16,13 +16,15 @@ case class SimpleRNG(seed: Long) extends RNG {
 }
 
 object RNG {
-  def nonNegativeInt(rng: RNG): (Int, RNG) = {
+  type Rand[+A] = RNG => (A, RNG)
+
+  def nonNegativeInt: Rand[Int] = rng => {
     val (nextVal, nextGen) = rng.nextInt
     val nonNegativeNextVal = if (nextVal == Integer.MIN_VALUE) 0 else math.abs(nextVal)
     (nonNegativeNextVal, nextGen)
   }
 
-  def double(rng: RNG): (Double, RNG) = {
+  def double: Rand[Double] = rng => {
     val (nextVal, nextGen) = nonNegativeInt(rng)
     val nonNegativeNextVal =
       if (nextVal == 0) 0
@@ -30,26 +32,26 @@ object RNG {
     (nonNegativeNextVal, nextGen)
   }
 
-  def intDouble(rng: RNG): ((Int, Double), RNG) = {
+  def intDouble: Rand[(Int, Double)] = rng => {
     val (nextInt, nextRNG) = nonNegativeInt(rng)
     val (nextDouble, otherNextRNG) = double(nextRNG)
     ((nextInt, nextDouble), otherNextRNG)
   }
 
-  def doubleInt(rng: RNG): ((Double, Int), RNG) = {
+  def doubleInt: Rand[(Double, Int)] = rng => {
     val (nextInt, nextRNG) = nonNegativeInt(rng)
     val (nextDouble, otherNextRNG) = double(nextRNG)
     ((nextDouble, nextInt), otherNextRNG)
   }
 
-  def double3(rng: RNG): ((Double, Double, Double), RNG) = {
+  def double3: Rand[(Double, Double, Double)] = rng => {
     val (aValue, aRng) = double(rng)
     val (bValue, bRng) = double(aRng)
     val (cValue, cRng) = double(bRng)
     ((aValue, bValue, cValue), cRng)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+  def ints(count: Int): Rand[List[Int]] = rng => {
     @tailrec
     def loop(c: Int, acc: (List[Int], RNG)): (List[Int], RNG) = {
       if (c > 0) {
