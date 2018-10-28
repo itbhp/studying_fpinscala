@@ -18,18 +18,22 @@ case class SimpleRNG(seed: Long) extends RNG {
 object RNG {
   type Rand[+A] = RNG => (A, RNG)
 
-  def nonNegativeInt: Rand[Int] = rng => {
-    val (nextVal, nextGen) = rng.nextInt
-    val nonNegativeNextVal = if (nextVal == Integer.MIN_VALUE) 0 else math.abs(nextVal)
-    (nonNegativeNextVal, nextGen)
-  }
+  def unit[A](a: A): Rand[A] =
+    rng => (a, rng)
 
-  def double: Rand[Double] = rng => {
-    val (nextVal, nextGen) = nonNegativeInt(rng)
-    val nonNegativeNextVal =
-      if (nextVal == 0) 0
-      else (Integer.MAX_VALUE.toDouble - nextVal.toDouble) / Integer.MAX_VALUE.toDouble
-    (nonNegativeNextVal, nextGen)
+  def map[A, B](s: Rand[A])(f: A => B): Rand[B] =
+    rng => {
+      val (a, rng2) = s(rng)
+      (f(a), rng2)
+    }
+
+  def int: Rand[Int] = _.nextInt
+
+  def nonNegativeInt: Rand[Int] = map(int)(a => if (a == Integer.MIN_VALUE) 0 else math.abs(a))
+
+  def double: Rand[Double] = map(nonNegativeInt) { nextVal =>
+    if (nextVal == 0) 0
+    else (Integer.MAX_VALUE - nextVal.toDouble) / Integer.MAX_VALUE
   }
 
   def intDouble: Rand[(Int, Double)] = rng => {
