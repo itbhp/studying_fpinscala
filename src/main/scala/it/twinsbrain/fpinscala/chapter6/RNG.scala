@@ -1,6 +1,7 @@
 package it.twinsbrain.fpinscala.chapter6
 
 import scala.annotation.tailrec
+import scala.collection.immutable.List.empty
 
 trait RNG {
   def nextInt: (Int, RNG)
@@ -34,19 +35,12 @@ object RNG {
       (f(a, b), nextRng)
     }
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = rng => {
-    @tailrec
-    def loop(generators: List[Rand[A]], values: List[A], curRng: RNG): (List[A], RNG) =
-      generators match {
-        case x :: xs => {
-          val (nextVal, nextRng) = x(curRng)
-          loop(xs, nextVal :: values, nextRng)
-        }
-        case Nil => (values, curRng)
-      }
-
-    loop(fs, List.empty[A], rng)
-  }
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = rng =>
+    fs.foldRight((empty[A], rng))((ra: Rand[A], acc: (List[A],RNG)) => {
+      val (list, rng) = acc
+      val (nextVal, nextRng) = ra(rng)
+      (nextVal :: list, nextRng)
+    })
 
   def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = rng => {
     val (aVal, nextARng) = f(rng)
