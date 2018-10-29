@@ -22,26 +22,18 @@ object RNG {
   def unit[A](a: A): Rand[A] =
     rng => (a, rng)
 
-  def map[A, B](s: Rand[A])(f: A => B): Rand[B] =
-    rng => {
-      val (a, rng2) = s(rng)
-      (f(a), rng2)
-    }
-
-  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
-    rc => {
-      val (a, rng) = ra(rc)
-      val (b, nextRng) = rb(rng)
-      (f(a, b), nextRng)
-    }
-
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
-    fs.foldRight(unit(empty[A]))((ra, acc) => map2(ra, acc)(_::_))
-
   def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = rng => {
     val (aVal, nextARng) = f(rng)
     g(aVal)(nextARng)
   }
+
+  def map[A, B](s: Rand[A])(f: A => B): Rand[B] = flatMap(s)(a => unit(f(a)))
+
+  def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
+    flatMap(ra)(a => map(rb)(b => f(a,b)))
+
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] =
+    fs.foldRight(unit(empty[A]))((ra, acc) => map2(ra, acc)(_::_))
 
   def int: Rand[Int] = _.nextInt
 
