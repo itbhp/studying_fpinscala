@@ -74,7 +74,7 @@ object RNG {
     i => {
       val mod = i % n
       if (i + (n - 1) - mod >= 0) {
-        (mod, _)
+        unit(mod)
       }
       else {
         nonNegativeLessThan(n)
