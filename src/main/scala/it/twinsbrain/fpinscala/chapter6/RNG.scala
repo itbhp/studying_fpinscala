@@ -34,6 +34,20 @@ object RNG {
       (f(a, b), nextRng)
     }
 
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = rng => {
+    @tailrec
+    def loop(generators: List[Rand[A]], values: List[A], curRng: RNG): (List[A], RNG) =
+      generators match {
+        case x :: xs => {
+          val (nextVal, nextRng) = x(curRng)
+          loop(xs, nextVal :: values, nextRng)
+        }
+        case Nil => (values, curRng)
+      }
+
+    loop(fs, List.empty[A], rng)
+  }
+
   def int: Rand[Int] = _.nextInt
 
   def nonNegativeInt: Rand[Int] = map(int)(a => if (a == Integer.MIN_VALUE) 0 else math.abs(a))
@@ -45,7 +59,7 @@ object RNG {
 
   def intDouble: Rand[(Int, Double)] = map2(nonNegativeInt, double)((_, _))
 
-  def doubleInt: Rand[(Double, Int)] = map2(double,nonNegativeInt)((_, _))
+  def doubleInt: Rand[(Double, Int)] = map2(double, nonNegativeInt)((_, _))
 
   def double3: Rand[(Double, Double, Double)] = rng => {
     val (aValue, aRng) = double(rng)
@@ -54,16 +68,5 @@ object RNG {
     ((aValue, bValue, cValue), cRng)
   }
 
-  def ints(count: Int): Rand[List[Int]] = rng => {
-    @tailrec
-    def loop(c: Int, acc: (List[Int], RNG)): (List[Int], RNG) = {
-      if (c > 0) {
-        val (curList, curRNG) = acc
-        val (nextInt, nextRNG) = curRNG.nextInt
-        loop(c - 1, (nextInt :: curList, nextRNG))
-      } else acc
-    }
-
-    loop(count, (Nil, rng))
-  }
+  def ints(count: Int): Rand[List[Int]] = sequence(List.fill(count)(int))
 }
