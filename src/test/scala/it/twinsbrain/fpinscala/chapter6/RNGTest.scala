@@ -64,4 +64,12 @@ class RNGTest extends FunSuite with GeneratorDrivenPropertyChecks with Matchers 
     }
   }
 
+  test("non negative less than 60") {
+    forAll { n: Int =>
+      val (value, _) = nonNegativeLessThan(6)(SimpleRNG(n))
+      value should be >= 0
+      value should be <= 60
+    }
+  }
+
 }
