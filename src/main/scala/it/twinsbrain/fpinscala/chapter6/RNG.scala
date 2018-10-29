@@ -48,6 +48,11 @@ object RNG {
     loop(fs, List.empty[A], rng)
   }
 
+  def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = rng => {
+    val (aVal, nextARng) = f(rng)
+    g(aVal)(nextARng)
+  }
+
   def int: Rand[Int] = _.nextInt
 
   def nonNegativeInt: Rand[Int] = map(int)(a => if (a == Integer.MIN_VALUE) 0 else math.abs(a))
@@ -80,10 +85,5 @@ object RNG {
         nonNegativeLessThan(n)
       }
     }
-  }
-
-  def flatMap[A, B](f: Rand[A])(g: A => Rand[B]): Rand[B] = rng => {
-    val (aVal, nextARng) = f(rng)
-    g(aVal)(nextARng)
   }
 }
