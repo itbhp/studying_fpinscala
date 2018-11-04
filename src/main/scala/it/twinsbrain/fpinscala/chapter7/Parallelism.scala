@@ -90,7 +90,7 @@ object ParExample {
 
   def parFilter[A](l: List[A])(f: A => Boolean): Par[List[A]] = {
     val pars: List[Par[List[A]]] =
-      l map (asyncF((a: A) => if (f(a)) List(a) else List()))
+      l map asyncF((a: A) => if (f(a)) List(a) else List())
     val value: Par[List[List[A]]] = sequence(pars)
     map(value)(_.flatten) // convenience method on `List` for concatenating a list of lists
   }
