@@ -1,6 +1,6 @@
 package it.twinsbrain.fpinscala.chapter7
 
-import java.util.concurrent.{ExecutorService, Executors, TimeUnit}
+import java.util.concurrent.{Executors, TimeUnit}
 
 import it.twinsbrain.fpinscala.chapter7.Par.Par
 import org.scalatest._
