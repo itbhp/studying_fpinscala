@@ -78,12 +78,20 @@ object ParExample {
 
   def asyncF[A, B](f: A => B): A => Par[B] = a => map(lazyUnit(a))(f)
 
-  def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = sequence(ps.map(asyncF(f)))
+  def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = fork {
+    sequence(ps.map(asyncF(f)))
+  }
 
   //    ps match {
   //      case Nil => lazyUnit(Nil)
   //      case x :: xs => map2(lazyUnit(f(x)), fork(parMap(xs)(f)))(_ :: _)
   //    }
+
+  def parFilter[A](as: List[A])(f: A => Boolean): Par[List[A]] = {
+    val z: Par[List[A]] = lazyUnit(List())
+    as.foldRight(z)((e, acc) => map2(lazyUnit(e), acc)((e, l) => if (f(e)) e :: l else l))
+  }
+
 
   def sum(ints: IndexedSeq[Int]): Par[Int] = if (ints.length <= 1)
     Par.unit(ints.headOption getOrElse 0) else {
