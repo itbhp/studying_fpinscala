@@ -11,7 +11,7 @@ object Par {
 
   def lazyUnit[A](a: => A): Par[A] = fork(unit(a))
 
-  def map[A, B](a: Par[A])(f: A => B): Par[B] = es => Par.UnitFuture(f(a(es).get))
+  def map[A, B](a: Par[A])(f: A => B): Par[B] = map2(a, unit(()))((a,_) => f(a))
 
   def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] =
     es => {
