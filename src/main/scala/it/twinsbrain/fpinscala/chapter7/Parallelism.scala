@@ -69,6 +69,8 @@ object ParExample {
 
   import Par._
 
+  def asyncF[A,B](f: A => B): A => Par[B] = a => unit(f(a))
+
   def sum(ints: IndexedSeq[Int]): Par[Int] = if (ints.length <= 1)
     Par.unit(ints.headOption getOrElse 0) else {
     val (l, r) = ints.splitAt(ints.length / 2)

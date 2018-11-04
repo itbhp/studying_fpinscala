@@ -14,4 +14,9 @@ class ParExampleTest extends FunSuite with Matchers{
     parallelSum(es).get(6, TimeUnit.SECONDS)  shouldEqual 6
   }
 
+  test("run function asynchronously"){
+    val es = Executors.newFixedThreadPool(1)
+    asyncF((n:Int) => n * n) (2)(es).get(5, TimeUnit.SECONDS) shouldEqual 4
+  }
+
 }
