@@ -9,6 +9,10 @@ object Par {
 
   def unit[A](a: A): Par[A] = (es: ExecutorService) => UnitFuture(a)
 
+  def lazyUnit[A](a: => A): Par[A] = fork(unit(a))
+
+  def map[A, B](a: Par[A])(f: A => B): Par[B] = es => Par.UnitFuture(f(a(es).get))
+
   def map2[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] =
     es => {
       val (af, bf) = (a(es), b(es))
@@ -69,7 +73,7 @@ object ParExample {
 
   import Par._
 
-  def asyncF[A,B](f: A => B): A => Par[B] = a => unit(f(a))
+  def asyncF[A, B](f: A => B): A => Par[B] = a => map(lazyUnit(a))(f)
 
   def sum(ints: IndexedSeq[Int]): Par[Int] = if (ints.length <= 1)
     Par.unit(ints.headOption getOrElse 0) else {
