@@ -2,7 +2,7 @@ package it.twinsbrain.fpinscala.chapter7
 
 import java.util.concurrent.Executors
 
-import it.twinsbrain.fpinscala.chapter7.Par.Par
+import it.twinsbrain.fpinscala.chapter7.Par.{Par, choice, lazyUnit}
 import org.scalatest._
 
 class ParExampleTest extends FunSuite with Matchers {
@@ -37,5 +37,10 @@ class ParExampleTest extends FunSuite with Matchers {
       x
     })
     Par.run(es)(delayWithException(1)) shouldEqual 1
+  }
+
+  test("choice"){
+    Par.run(es)(choice(lazyUnit(true))(lazyUnit(2),lazyUnit(3))) shouldEqual 2
+    Par.run(es)(choice(lazyUnit(false))(lazyUnit(2),lazyUnit(3))) shouldEqual 3
   }
 }

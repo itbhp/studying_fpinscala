@@ -65,6 +65,9 @@ object Par {
   def sequence[A](ps: List[Par[A]]): Par[List[A]] =
     ps.foldRight[Par[List[A]]](unit(List()))((parElem, acc) => map2(parElem, acc)(_ :: _))
 
+  def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
+    es =>
+      if (run(es)(cond)) t(es) else f(es)
 
 }
 
