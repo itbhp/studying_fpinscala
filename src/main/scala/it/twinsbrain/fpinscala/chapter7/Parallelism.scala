@@ -17,9 +17,10 @@ object Par {
     val ref = new AtomicReference[A]
     val latch = new CountDownLatch(1)
     p(es) {
-      a =>
-        ref.set(a);
+      a => {
+        ref.set(a)
         latch.countDown
+      }
     }
     latch.await
     ref.get()
