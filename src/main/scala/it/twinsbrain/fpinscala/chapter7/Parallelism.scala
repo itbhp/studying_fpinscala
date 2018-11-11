@@ -9,7 +9,7 @@ object Par {
 
   def unit[A](a: A): Par[A] = (es: ExecutorService) => UnitFuture(a)
 
-  def lazyUnit[A](a: => A): Par[A] = fork(unit(a))
+  def lazyUnit[A](a: => A): Par[A] = delay(unit(a))
 
   def map[A, B](a: Par[A])(f: A => B): Par[B] = map2(a, unit(()))((a, _) => f(a))
 
@@ -19,12 +19,7 @@ object Par {
       Map2Future(af, bf, f)
     }
 
-  def fork[A](a: => Par[A]): Par[A] =
-    es => es.submit(
-      new Callable[A] {
-        def call = a(es).get
-      }
-    )
+  def delay[A](fa: => Par[A]): Par[A] = es => fa(es)
 
   def sequence[A](ps: List[Par[A]]): Par[List[A]] =
   //    es => UnitFuture(ps.map(parElem => parElem(es).get))
@@ -78,7 +73,7 @@ object ParExample {
 
   def asyncF[A, B](f: A => B): A => Par[B] = a => map(lazyUnit(a))(f)
 
-  def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = fork {
+  def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = delay {
     sequence(ps.map(asyncF(f)))
   }
 
@@ -95,6 +90,6 @@ object ParExample {
       Par.unit(ints.headOption getOrElse 0)
     else {
       val (l, r) = ints.splitAt(ints.length / 2)
-      Par.map2(Par.fork(sum(l)), Par.fork(sum(r)))(_ + _)
+      Par.map2(Par.delay(sum(l)), Par.delay(sum(r)))(_ + _)
     }
 }
