@@ -3,7 +3,6 @@ package it.twinsbrain.fpinscala.chapter7
 import java.util.concurrent._
 import java.util.concurrent.atomic.AtomicReference
 
-import scalaz.Choice
 import scalaz.concurrent.Actor
 
 object Par {
