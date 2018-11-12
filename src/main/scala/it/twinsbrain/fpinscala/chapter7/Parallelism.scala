@@ -67,8 +67,8 @@ object Par {
 
   def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
     flatMap(cond)(b => if (b) t else f)
-//      choiceMap(cond)(Map(true -> t, false -> f))
-//      choiceN(map(cond)(b => if (b) 0 else 1))(List(t, f))
+  //      choiceMap(cond)(Map(true -> t, false -> f))
+  //      choiceN(map(cond)(b => if (b) 0 else 1))(List(t, f))
 
   def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] =
     flatMap(n)(i => choices(i))
@@ -76,9 +76,16 @@ object Par {
   def choiceMap[K, V](key: Par[K])(choices: Map[K, Par[V]]): Par[V] =
     flatMap(key)(k => choices(k))
 
-  def flatMap[A, B](par: Par[A])(f: A => Par[B]): Par[B] = es => {
-    val value = run(es)(par)
-    f(value)(es)
+  def flatMap[A, B](par: Par[A])(f: A => Par[B]): Par[B] = {
+    val mapping: (Par[A]) => Par[Par[B]] = (p: Par[A]) => map(p)(f)
+    val joining: (Par[Par[B]]) => Par[B] = (p: Par[Par[B]]) => join(p)
+    (mapping andThen joining) (par)
+  }
+
+  def join[A](a: Par[Par[A]]): Par[A] = es => {
+    val funFromEsToFuture: Par[A] = run(es)(a)
+    val b: Future[A] = funFromEsToFuture(es)
+    b
   }
 
 }
