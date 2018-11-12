@@ -66,18 +66,21 @@ object Par {
     ps.foldRight[Par[List[A]]](unit(List()))((parElem, acc) => map2(parElem, acc)(_ :: _))
 
   def choice[A](cond: Par[Boolean])(t: Par[A], f: Par[A]): Par[A] =
-    choiceMap(cond)(Map(true -> t, false -> f))
-//    choiceN(map(cond)(b => if (b) 0 else 1))(List(t, f))
+    chooser(cond)(b => if (b) t else f)
+//      choiceMap(cond)(Map(true -> t, false -> f))
+//      choiceN(map(cond)(b => if (b) 0 else 1))(List(t, f))
 
-  def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = es => {
-    val index = run(es)(n)
-    (choices(index))(es)
-  }
+  def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] =
+    chooser(n)(i => choices(i))
 
-  def choiceMap[K,V](key: Par[K])(choices: Map[K,Par[V]]): Par[V] = es =>{
+  def choiceMap[K, V](key: Par[K])(choices: Map[K, Par[V]]): Par[V] =
+    chooser(key)(k => choices(k))
+
+  def chooser[A, B](key: Par[A])(choices: A => Par[B]): Par[B] = es => {
     val keyVal = run(es)(key)
     choices(keyVal)(es)
   }
+
 }
 
 object ParExample {
