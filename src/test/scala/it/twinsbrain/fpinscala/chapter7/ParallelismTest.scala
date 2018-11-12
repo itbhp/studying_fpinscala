@@ -5,7 +5,7 @@ import java.util.concurrent.Executors
 import it.twinsbrain.fpinscala.chapter7.Par.{Par, choice, lazyUnit}
 import org.scalatest._
 
-class ParExampleTest extends FunSuite with Matchers {
+class ParallelismTest extends FunSuite with Matchers {
   val es = Executors.newFixedThreadPool(1)
 
   import ParExample._
