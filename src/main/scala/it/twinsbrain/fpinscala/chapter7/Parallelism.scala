@@ -77,16 +77,12 @@ object Par {
     flatMap(key)(k => choices(k))
 
   def flatMap[A, B](par: Par[A])(f: A => Par[B]): Par[B] = {
-    val mapping: (Par[A]) => Par[Par[B]] = (p: Par[A]) => map(p)(f)
-    val joining: (Par[Par[B]]) => Par[B] = (p: Par[Par[B]]) => join(p)
+    val mapping = (p: Par[A]) => map(p)(f)
+    val joining = (p: Par[Par[B]]) => join(p)
     (mapping andThen joining) (par)
   }
 
-  def join[A](a: Par[Par[A]]): Par[A] = es => {
-    val funFromEsToFuture: Par[A] = run(es)(a)
-    val b: Future[A] = funFromEsToFuture(es)
-    b
-  }
+  def join[A](a: Par[Par[A]]): Par[A] = es => run(es)(a)(es)
 
 }
 
