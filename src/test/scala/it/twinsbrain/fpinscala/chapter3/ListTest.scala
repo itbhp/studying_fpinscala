@@ -52,9 +52,8 @@ class ListTest extends FunSuite with Matchers{
   }
 
   test("dropWhile on nonEmpty"){
-    val aList: List[Int] = List(2,4,6,3,4,5)
     val isEven: Int => Boolean = (x: Int) => x % 2 == 0
-    dropWhile(isEven, aList) shouldEqual List(3,4,5)
+    dropWhile(isEven, List(2, 4, 6, 3, 4, 5)) shouldEqual List(3,4,5)
   }
 
   test("init on empty"){
@@ -137,7 +136,7 @@ class ListTest extends FunSuite with Matchers{
     startsWith(List(1,2,3,4,5,6,7),List(1,2)) shouldEqual true
   }
 
-  test("hasSubsequence"){
-    hasSubsequence(List(1,2,3,4,5,6,7),List(3,4,5)) shouldEqual true
+  test("hasSubSequence"){
+    hasSubSequence(List(1,2,3,4,5,6,7),List(3,4,5)) shouldEqual true
   }
 }
