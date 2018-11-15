@@ -62,18 +62,18 @@ class EitherTest extends FunSuite with Matchers {
     sequence(List(Right(4), Right(5), Right(3))) shouldEqual Right(List(4, 5, 3))
   }
 
-  val f: Int => Either[Exception, Int] = i => Try(1 / i)
+  val inverse: Int => Either[Exception, Int] = i => Try(1 / i)
 
   test("traverse on Nil") {
-    traverse(Nil)(f) shouldEqual Right(Nil)
+    traverse(Nil)(inverse) shouldEqual Right(Nil)
   }
 
   test("traverse with no Exception") {
-    traverse(List(4, 5, 3))(f) shouldEqual Right(List(1 / 4, 1 / 5, 1 / 3))
+    traverse(List(4, 5, 3))(inverse) shouldEqual Right(List(1 / 4, 1 / 5, 1 / 3))
   }
 
   test("traverse with Exception") {
-    traverse(List(4, 5, 0, 3, 0))(f) match {
+    traverse(List(4, 5, 0, 3, 0))(inverse) match {
       case Right(_) => fail()
       case Left(e) => e shouldBe a [ArithmeticException]
     }
